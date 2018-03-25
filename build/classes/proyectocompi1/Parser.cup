@@ -1,0 +1,67 @@
+package proyectocompi1;
+import java_cup.runtime.*;
+
+terminal TK_VARIABLE_TIPO;
+terminal TK_BOOLEAN;
+terminal TK_BREAK;
+terminal TK_CASE;
+terminal TK_CHAR;
+terminal TK_STRING;
+terminal TK_FUNC;
+terminal TK_ELSE;
+terminal TK_FOR;
+terminal TK_DEFAULT;
+terminal TK_INT;
+terminal TK_IF;
+terminal TK_THEN;
+terminal TK_SWITCH;
+terminal TK_RETURN;
+terminal TK_WHILE;
+terminal TK_PRINT;
+terminal TK_INPUT;
+terminal TK_TRUE;
+terminal TK_FALSE;
+terminal TK_NULL;
+terminal TK_LPAREN;
+terminal TK_RPAREN;
+terminal TK_LBRACE;
+terminal TK_RBRACE;
+terminal TK_LBRACK;
+terminal TK_RBRACK;
+terminal TK_SEMICOLON;
+terminal TK_COMMA;
+terminal TK_DOT;
+terminal TK_ASIG;
+terminal TK_OPLOG;
+terminal TK_OPMAT;
+terminal TK_OPREL;
+terminal TK_PLUSPLUS;
+terminal TK_MINUSMINUS;
+terminal ID;
+terminal ENDLINE;
+terminal WHITESPACE;
+terminal COMMENT_BEGIN;
+terminal COMMENT_END;
+terminal LETRA;
+terminal DIGIT;
+terminal INT;
+terminal STRING;
+terminal TK_ARRAY;
+
+non terminal begin;
+non terminal type, nt_int, nt_double, nt_boolean, nt_char, nt_string;
+non terminal i, i2, d, b, c, s;
+
+start with begin;
+
+begin ::= type;
+
+type ::= TK_INT nt_int |
+	 TK_BOOLEAN nt_boolean |
+	 TK_CHAR nt_char |
+	 TK_STRING nt_string; 
+
+nt_int ::= i TK_SEMICOLON;
+i2     ::= TK_INT;
+i      ::= i TK_COMMA ID ;
+i      ::= i2 ID;
