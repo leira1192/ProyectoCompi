@@ -6,8 +6,9 @@
             <file>file:/C:/Users/leirA/Documents/NetBeansProjects/ProyectoCompi1/src/proyectocompi1/lexer.java</file>
             <file>file:/C:/Users/leirA/Documents/NetBeansProjects/ProyectoCompi1/src/proyectocompi1/lexer.flex</file>
             <file>file:/C:/Users/leirA/Documents/NetBeansProjects/ProyectoCompi1/src/proyectocompi1/Parser.cup</file>
-            <file>file:/C:/Users/leirA/Documents/NetBeansProjects/ProyectoCompi1/src/proyectocompi1/A_Lexico.bat</file>
             <file>file:/C:/Users/leirA/Documents/NetBeansProjects/ProyectoCompi1/src/proyectocompi1/ProyectoCompi1.java</file>
+            <file>file:/C:/Users/leirA/Documents/NetBeansProjects/ProyectoCompi1/src/proyectocompi1/JFlex_Compi.java</file>
+            <file>file:/C:/Users/leirA/Documents/NetBeansProjects/ProyectoCompi1/src/proyectocompi1/JCup_Compi.java</file>
             <file>file:/C:/Users/leirA/Documents/NetBeansProjects/ProyectoCompi1/src/proyectocompi1/sym.java</file>
         </group>
     </open-files>

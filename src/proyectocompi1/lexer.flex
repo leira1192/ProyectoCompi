@@ -16,6 +16,9 @@ import java.util.*;
 %cupdebug
 
 
+//Inicio y final
+TK_START = start
+TK_END = end
 
 TK_VARIABLE_TIPO = {TK_INT}|{TK_STRING}|{TK_BOOLEAN}|{TK_CHAR}
 TK_BOOLEAN = bool 
@@ -104,6 +107,10 @@ COMMENT_END = [**/]
 %%
 
 <YYINITIAL>{
+        {TK_START}                        { System.out.println("START: ");
+                                            return new Symbol(sym.TK_START, yychar, yyline); }
+        {TK_END}                          { System.out.println("END: ");
+                                            return new Symbol(sym.TK_END, yychar, yyline); }
         {LETRA}                           { System.out.println("LETRA: ");
                                             return new Symbol(sym.LETRA, yychar, yyline); }
         {DIGIT}                           { System.out.println("DIGIT: ");

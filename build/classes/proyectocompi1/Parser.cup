@@ -1,6 +1,8 @@
 package proyectocompi1;
 import java_cup.runtime.*;
 
+terminal TK_START;
+terminal TK_END;
 terminal TK_VARIABLE_TIPO;
 terminal TK_BOOLEAN;
 terminal TK_BREAK;
@@ -48,20 +50,4 @@ terminal INT;
 terminal STRING;
 terminal TK_ARRAY;
 
-non terminal begin;
-non terminal type, nt_int, nt_double, nt_boolean, nt_char, nt_string;
-non terminal i, i2, d, b, c, s;
 
-start with begin;
-
-begin ::= type;
-
-type ::= TK_INT nt_int |
-	 TK_BOOLEAN nt_boolean |
-	 TK_CHAR nt_char |
-	 TK_STRING nt_string; 
-
-nt_int ::= i TK_SEMICOLON;
-i2     ::= TK_INT;
-i      ::= i TK_COMMA ID ;
-i      ::= i2 ID;
