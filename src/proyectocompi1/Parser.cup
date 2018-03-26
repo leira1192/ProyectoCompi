@@ -1,5 +1,7 @@
 package proyectocompi1;
 import java_cup.runtime.*;
+import Node.Node;
+import java.util.ArrayList;
 
 terminal TK_START;
 terminal TK_END;
@@ -49,5 +51,63 @@ terminal DIGIT;
 terminal INT;
 terminal STRING;
 terminal TK_ARRAY;
+terminal CHAR;
 
 
+
+non terminal Node Start;
+non terminal ArrayList<Node> Main;
+non terminal Node Variables;
+non terminal Node Valor;
+non terminal Node Array;
+non terminal Node ArrayContent;
+non terminal ArrayList<Node> Content;
+
+Start::=TK_START Variables:vs Main:m TK_END
+    {:
+
+    :}
+    |error Variables:vs Main:m TK_END
+    |TK_START Variables:vs Main:m error
+    ;
+
+
+Variables::= TK_SEMICOLON TK_VARIABLE_TIPO:vt ID:id TK_ASIG Valor:v Variables:vs
+    {:
+    
+    :}
+    |TK_SEMICOLON Array:ar Variables:vs
+    |error Valor:v Variables:vs
+    |/*Vacio*/{:RESULT = null;:}
+    ;
+
+Valor::= INT:i {::}
+    |STRING:s {::}
+    |CHAR:l {::}
+    |TK_TRUE:t {::}
+    |TK_FALSE:f {::}
+    |ID:id {::}
+    |error
+    ;
+
+Array::= TK_ARRAY:ar TK_DOT TK_VARIABLE_TIPO:vt TK_DOT INT:i ID:id TK_ASIG ArrayContent
+    {:
+
+    :}
+    |error ArrayContent
+    ;
+
+ArrayContent::= TK_LBRACK Content:c TK_RBRACK
+    {:
+
+    :}
+    |TK_LBRACK TK_RBRACK
+    |error TK_RBRACK /**/
+    ;
+
+Content::= Valor:v TK_COMMA Content:c
+    {:
+
+    :}
+    |Valor:v
+    ;
