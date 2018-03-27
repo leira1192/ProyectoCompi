@@ -41,6 +41,7 @@ terminal TK_OPMAT;
 terminal TK_OPREL;
 terminal TK_PLUSPLUS;
 terminal TK_MINUSMINUS;
+terminal TK_ADDLESS;
 terminal ID;
 terminal ENDLINE;
 terminal WHITESPACE;
@@ -52,6 +53,10 @@ terminal INT;
 terminal STRING;
 terminal TK_ARRAY;
 terminal CHAR;
+terminal OR;
+terminal AND;
+terminal BOOLEAN;
+terminal OPREL_NOT;
 
 
 
@@ -62,6 +67,18 @@ non terminal Node Valor;
 non terminal Node Array;
 non terminal Node ArrayContent;
 non terminal ArrayList<Node> Content;
+non terminal Node For;
+non terminal Node Body;
+non terminal Node While;
+non terminal Node BoolExp;
+non terminal Node BoolExp2;
+non terminal Node BoolExp3;
+non terminal Node AritExp;
+non terminal Node MultiExp;
+non terminal Node Exp;
+non terminal Node ArrayE;
+non terminal Node FunCall;
+non terminal Node Sor;
 
 Start::=TK_START Variables:vs Main:m TK_END
     {:
@@ -78,7 +95,7 @@ Variables::= TK_SEMICOLON TK_VARIABLE_TIPO:vt ID:id TK_ASIG Valor:v Variables:vs
     :}
     |TK_SEMICOLON Array:ar Variables:vs
     |error Valor:v Variables:vs
-    |/*Vacio*/{:RESULT = null;:}
+    |/*Vacio*/
     ;
 
 Valor::= INT:i {::}
@@ -110,4 +127,95 @@ Content::= Valor:v TK_COMMA Content:c
 
     :}
     |Valor:v
+    ;
+
+For::= TK_FOR TK_LPAREN TK_INT ID:id1 TK_ASIG INT:i1 TK_SEMICOLON ID:id2 TK_OPLOG INT:i2 TK_SEMICOLON ID:id3 TK_ADDLESS:al TK_RPAREN Body:b
+    {:
+    
+    :}
+    |error Body:b
+    ;
+
+Body::= TK_START Main:m TK_END
+    {:
+    
+    :}
+    |error Main:m TK_END
+    ;
+
+While::= TK_WHILE TK_LPAREN BoolExp:be TK_RPAREN Body:b
+    {:
+    
+    :}
+    |error BoolExp:be TK_RPAREN Body:b
+    ;
+
+BoolExp::= BoolExp:be OR BoolExp2:be2
+    {:
+    
+    :}
+    |BoolExp2:be2
+    {:
+    
+    :}
+    ;
+
+BoolExp2::= BoolExp2:be2 AND BoolExp3:be3
+    {:
+    
+    :}
+    |BoolExp3:be3
+    {:
+    
+    :}
+    ;
+
+BoolExp3::= AritExp:ae TK_OPREL:op AritExp:ae2
+    {::}
+    |BOOLEAN:b
+    {::}
+    |TK_LPAREN BoolExp:be TK_RPAREN
+    {::}
+    |OPREL_NOT TK_LPAREN BoolExp:be TK_RPAREN
+    {::}
+    ;
+
+AritExp::= AritExp:ae Sor:sor MultiExp:me /*non terminal SOR*/
+    {::}
+    |Exp:e
+    {::}
+    ;
+
+MultiExp::= MultiExp:me TK_OPMAT Exp:e
+    {::}
+    |Exp:e
+    {::}
+    ;
+
+Exp::= ID:id
+    {::}
+    |INT:i
+    {::}
+    |CHAR:c
+    {::}
+    |STRING:s
+    {::}
+    |FunCall:fc /*non terminal FunCall*/
+    {::}
+    |ArrayE:ae /*non terminal ArrayE*/
+    {::}
+    |TK_LPAREN AritExp:ae TK_RPAREN
+    {::}
+    ;
+
+ArrayE::=
+    {::}
+    ;
+
+FunCall::=
+    {::}
+    ;
+
+Sor::=
+    {::}
     ;

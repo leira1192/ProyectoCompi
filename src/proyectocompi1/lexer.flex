@@ -63,6 +63,7 @@ TK_WHILE = while
 
 TK_TRUE = true
 TK_FALSE = false
+BOOLEAN = {TK_TRUE}|{TK_FALSE}
 TK_NULL = null
 TK_LPAREN = \(
 TK_RPAREN = \)
@@ -86,17 +87,20 @@ TK_OPLOG = GT | LT | EQEQ | LTEQ | GTEQ | NOTEQ
 
 TK_PLUSPLUS = [++]
 TK_MINUSMINUS = --
+TK_ADDLESS = TK_PLUSPLUS | TK_MINUSMINUS
 
 PLUS = \+
 MINUS = -
 MULT = \*
 DIV = \/
 MOD = %
-TK_OPMAT = PLUS | MINUS | MULT | DIV | MOD
+TK_OPMAT = MULT | DIV | MOD
 
 AND = &&
 OR = [||]
 TK_OPREL = AND | OR
+
+OPREL_NOT = \!
 
 
 COMMENT_BEGIN = [/**]
@@ -107,6 +111,14 @@ COMMENT_END = [**/]
 %%
 
 <YYINITIAL>{
+        {OPREL_NOT}                       { System.out.println("OPREL_NOT: ");
+                                            return new Symbol(sym.OPREL_NOT, yychar, yyline); }
+        {BOOLEAN}                         { System.out.println("BOOLEAN: ");
+                                            return new Symbol(sym.BOOLEAN, yychar, yyline); }
+        {OR}                              { System.out.println("OR: ");
+                                            return new Symbol(sym.OR, yychar, yyline); }
+        {AND}                             { System.out.println("AND: ");
+                                            return new Symbol(sym.AND, yychar, yyline); }
         {TK_START}                        { System.out.println("START: ");
                                             return new Symbol(sym.TK_START, yychar, yyline); }
         {TK_END}                          { System.out.println("END: ");
@@ -200,6 +212,8 @@ COMMENT_END = [**/]
                                             return new Symbol(sym.TK_PLUSPLUS, yychar, yyline); }
 	{TK_MINUSMINUS}                   { System.out.println("TK_MINUSMINUS: " + yytext());
                                             return new Symbol(sym.TK_MINUSMINUS, yychar, yyline); }
+        {TK_ADDLESS}                      { System.out.println("TK_ADDLESS: " + yytext());
+                                            return new Symbol(sym.TK_ADDLESS, yychar, yyline); }
 
  	/* numeric literals */
 	{ENDLINE}                         {}
