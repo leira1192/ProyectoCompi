@@ -2,7 +2,48 @@ package proyectocompi1;
 import java_cup.runtime.*;
 import Node.Node;
 import java.util.ArrayList;
+import java.lang.reflect.*;
 
+
+parser code {:
+    ArrayList<String> errores = new ArrayList();
+
+    @Override
+    public void report_error(String message, Object info) {
+        StringBuffer sb = new StringBuffer();
+        sb.append( message + ":");
+        if (info instanceof java_cup.runtime.Symbol) {
+            sb.append("  Line: " + ((Symbol)info).left  +  ", column: " + ((Symbol)info).right +". Unexpected token: " 
+                + getToken(((Symbol)info).sym) +  ". ");
+        }
+        errores.add(sb+"");
+        System.err.println(sb + "");        
+    }
+
+    private String getToken(int id) {
+        try {
+          Field [] field = sym.class.getFields();
+          for (int i = 0; i < field.length; i++) {
+            if (field[i].getInt(null) == id) {
+              return field[i].getName();
+            }
+          }
+        } catch (Exception e) {          
+        }
+        return "Token Desconocido, Fufupapachon ha quebrado del todo";
+      }
+    
+      
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception {
+      report_fatal_error("", null);
+    }
+    
+    @Override
+    public int error_sync_size(){
+        return 1;
+    }
+    :}
+    ;
 terminal TK_START;
 terminal TK_END;
 terminal TK_VARIABLE_TIPO;

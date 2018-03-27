@@ -15,28 +15,28 @@ import java.util.ArrayList;
 
 public class Node {
     String val;
-    int line = 0, caracter =0;
+    int line = 0, column =0;
     ArrayList<Node> hijos;
 //   
     public Node(String v){
         val= v;
         hijos = new ArrayList();
     }
-    public Node(String v, int line, int caracter){
+    public Node(String v, int line, int column){
         //System.out.println(v+ " : " + line +" : "+ column);
         this.val =v;
         this.line = line;
-        this.caracter = caracter;  
+        this.column = column;  
         hijos = new ArrayList();             
     }
     
     public void addNode(Node n){
         hijos.add(n);
     } 
-    public Node(Node n, int line, int caracter){
+    public Node(Node n, int line, int column){
         hijos.add(n);
         this.line = line;
-        this.caracter = caracter;
+        this.column = column;
                
     }
     
@@ -60,12 +60,12 @@ public class Node {
         this.line = line;
     }
 
-    public int getCaracter() {
-        return caracter;
+    public int getColumn() {
+        return column;
     }
 
-    public void setCaracter(int caracter) {
-        this.caracter = caracter;
+    public void setColumn(int column) {
+        this.column = column;
     }
 
     public ArrayList<Node> getHijos() {

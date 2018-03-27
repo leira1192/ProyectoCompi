@@ -113,130 +113,75 @@ COMMENT_END = [**/]
 %%
 
 <YYINITIAL>{
-        {TK_COMILLA}                      { System.out.println("TK_COMILLA: ");
-                                            return new Symbol(sym.TK_COMILLA, yychar, yyline); }
-        {TK_ELSEIF}                       { System.out.println("TK_ELSEIF: ");
-                                            return new Symbol(sym.TK_ELSEIF, yychar, yyline); }
-        {PLUS}                            { System.out.println("PLUS: ");
-                                            return new Symbol(sym.PLUS, yychar, yyline); }
-        {MINUS}                           { System.out.println("MINUS: ");
-                                            return new Symbol(sym.MINUS, yychar, yyline); }
-        {OPREL_NOT}                       { System.out.println("OPREL_NOT: ");
-                                            return new Symbol(sym.OPREL_NOT, yychar, yyline); }
-        {BOOLEAN}                         { System.out.println("BOOLEAN: ");
-                                            return new Symbol(sym.BOOLEAN, yychar, yyline); }
-        {OR}                              { System.out.println("OR: ");
-                                            return new Symbol(sym.OR, yychar, yyline); }
-        {AND}                             { System.out.println("AND: ");
-                                            return new Symbol(sym.AND, yychar, yyline); }
-        {TK_START}                        { System.out.println("START: ");
-                                            return new Symbol(sym.TK_START, yychar, yyline); }
-        {TK_END}                          { System.out.println("END: ");
-                                            return new Symbol(sym.TK_END, yychar, yyline); }
-        {LETRA}                           { System.out.println("LETRA: ");
-                                            return new Symbol(sym.LETRA, yychar, yyline); }
-        {DIGIT}                           { System.out.println("DIGIT: ");
-                                            return new Symbol(sym.DIGIT, yychar, yyline); }
-        {CHAR}                            { System.out.println("CHAR: ");
-                                            return new Symbol(sym.CHAR, yychar, yyline); }
-        {TK_ARRAY}                        { System.out.println("TK_ARRAY: ");
-                                            return new Symbol(sym.TK_ARRAY, yychar, yyline); }
-	{TK_VARIABLE_TIPO}                { System.out.println("TK_VARIABLE_TIPO: ");
-                                            return new Symbol(sym.TK_VARIABLE_TIPO, yychar, yyline); }
-	{TK_BOOLEAN}                      { System.out.println("TK_BOOLEAN: ");
-                                            return new Symbol(sym.TK_BOOLEAN, yychar, yyline); }
-	{TK_BREAK}                        { System.out.println("TK_BREAK: ");
-					    return new Symbol(sym.TK_BREAK, yychar, yyline); }
-	{TK_CASE}                         { System.out.println("TK_CASE: " + yytext());
-                                            return new Symbol(sym.TK_CASE, yychar, yyline); }
-	{TK_CHAR}                         { System.out.println("TK_CHAR: " + yytext());
-                                            return new Symbol(sym.TK_CHAR, yychar, yyline); }
-	{TK_STRING}                       { System.out.println("TK_STRING: " + yytext());
-                                            return new Symbol(sym.TK_STRING, yychar, yyline); }
-	{TK_FUNC}                         { System.out.println("TK_FUNC: " + yytext());
-                                            return new Symbol(sym.TK_FUNC, yychar, yyline); }
-	{TK_ELSE}                         { System.out.println("TK_ELSE: " + yytext());
-                                            return new Symbol(sym.TK_ELSE, yychar, yyline); }
-	{TK_FOR}                          { System.out.println("TK_FOR: " + yytext());
-                                            return new Symbol(sym.TK_FOR, yychar, yyline); }
-	{TK_DEFAULT}                      { System.out.println("TK_DEFAULT: " + yytext());
-                                            return new Symbol(sym.TK_DEFAULT, yychar, yyline); }
-	{TK_INT}                          { System.out.println("TK_INT: " + yytext());
-                                            return new Symbol(sym.TK_INT, yychar, yyline); }
-	{TK_IF}                           { System.out.println("TK_IF: " + yytext());
-                                            return new Symbol(sym.TK_IF, yychar, yyline); }
-	{TK_THEN}                         { System.out.println("TK_THEN: " + yytext());
-                                            return new Symbol(sym.TK_THEN, yychar, yyline); }
-	{TK_SWITCH}                       { System.out.println("TK_SWITCH: " + yytext());
-                                            return new Symbol(sym.TK_SWITCH, yychar, yyline); }
-	{TK_RETURN}                       { System.out.println("TK_RETURN: " + yytext());
-                                            return new Symbol(sym.TK_RETURN, yychar, yyline); }
-	{TK_WHILE}                        { System.out.println("TK_WHILE: " + yytext());
-                                            return new Symbol(sym.TK_WHILE, yychar, yyline); }
-	{TK_PRINT}			  { System.out.println("TK_PRINT: " + yytext());
-                                            return new Symbol(sym.TK_PRINT, yychar, yyline); }
-        {TK_INPUT}			  { System.out.println("TK_INPUT: " + yytext());
-                                            return new Symbol(sym.TK_INPUT, yychar, yyline); }
+        {TK_COMILLA}                      {return new Symbol(sym.TK_COMILLA, yycolumn, yyline); }
+        {TK_ELSEIF}                       {return new Symbol(sym.TK_ELSEIF, yycolumn, yyline); }
+        {PLUS}                            {return new Symbol(sym.PLUS, yycolumn, yyline); }
+        {MINUS}                           {return new Symbol(sym.MINUS, yycolumn, yyline); }
+        {OPREL_NOT}                       {return new Symbol(sym.OPREL_NOT, yycolumn, yyline); }
+        {BOOLEAN}                         {return new Symbol(sym.BOOLEAN, yycolumn, yyline); }
+        {OR}                              {return new Symbol(sym.OR, yycolumn, yyline); }
+        {AND}                             {return new Symbol(sym.AND, yycolumn, yyline); }
+        {TK_START}                        {return new Symbol(sym.TK_START, yycolumn, yyline); }
+        {TK_END}                          {return new Symbol(sym.TK_END, yycolumn, yyline); }
+        {LETRA}                           {return new Symbol(sym.LETRA, yycolumn, yyline); }
+        {DIGIT}                           {return new Symbol(sym.DIGIT, yycolumn, yyline); }
+        {CHAR}                            {return new Symbol(sym.CHAR, yycolumn, yyline); }
+        {TK_ARRAY}                        {return new Symbol(sym.TK_ARRAY, yycolumn, yyline); }
+	{TK_VARIABLE_TIPO}                {return new Symbol(sym.TK_VARIABLE_TIPO, yycolumn, yyline); }
+	{TK_BOOLEAN}                      {return new Symbol(sym.TK_BOOLEAN, yycolumn, yyline); }
+	{TK_BREAK}                        {return new Symbol(sym.TK_BREAK, yycolumn, yyline); }
+	{TK_CASE}                         {return new Symbol(sym.TK_CASE, yycolumn, yyline); }
+	{TK_CHAR}                         {return new Symbol(sym.TK_CHAR, yycolumn, yyline); }
+	{TK_STRING}                       {return new Symbol(sym.TK_STRING, yycolumn, yyline); }
+	{TK_FUNC}                         {return new Symbol(sym.TK_FUNC, yycolumn, yyline); }
+	{TK_ELSE}                         {return new Symbol(sym.TK_ELSE, yycolumn, yyline); }
+	{TK_FOR}                          {return new Symbol(sym.TK_FOR, yycolumn, yyline); }
+	{TK_DEFAULT}                      {return new Symbol(sym.TK_DEFAULT, yycolumn, yyline); }
+	{TK_INT}                          {return new Symbol(sym.TK_INT, yycolumn, yyline); }
+	{TK_IF}                           {return new Symbol(sym.TK_IF, yycolumn, yyline); }
+	{TK_THEN}                         {return new Symbol(sym.TK_THEN, yycolumn, yyline); }
+	{TK_SWITCH}                       {return new Symbol(sym.TK_SWITCH, yycolumn, yyline); }
+	{TK_RETURN}                       {return new Symbol(sym.TK_RETURN, yycolumn, yyline); }
+	{TK_WHILE}                        {return new Symbol(sym.TK_WHILE, yycolumn, yyline); }
+	{TK_PRINT}			  {return new Symbol(sym.TK_PRINT, yycolumn, yyline); }
+        {TK_INPUT}			  {return new Symbol(sym.TK_INPUT, yycolumn, yyline); }
         
 	/* boolean literals */
-	{TK_TRUE}                         { System.out.println("TK_TRUE: " + yytext());
-                                            return new Symbol(sym.TK_TRUE, yychar, yyline); }
-	{TK_FALSE}                        { System.out.println("TK_FALSE: " + yytext());
-                                            return new Symbol(sym.TK_FALSE, yychar, yyline); }
+	{TK_TRUE}                         {return new Symbol(sym.TK_TRUE, yycolumn, yyline); }
+	{TK_FALSE}                        {return new Symbol(sym.TK_FALSE, yycolumn, yyline); }
 
 	/* null literal */
-	{TK_NULL}                         { System.out.println("TK_NULL: " + yytext());
-                                            return new Symbol(sym.TK_NULL, yychar, yyline); }
+	{TK_NULL}                         {return new Symbol(sym.TK_NULL, yycolumn, yyline); }
 
 
 	/* separators */
-	{TK_LPAREN}                       { System.out.println("TK_LPAREN: " + yytext());
-                                            return new Symbol(sym.TK_LPAREN, yychar, yyline); }
-	{TK_RPAREN}                       { System.out.println("TK_RPAREN: " + yytext());
-                                            return new Symbol(sym.TK_RPAREN, yychar, yyline); }
-	{TK_LBRACE}                       { System.out.println("TK_LBRACE: " + yytext());
-                                            return new Symbol(sym.TK_LBRACE, yychar, yyline); }
-	{TK_RBRACE}                       { System.out.println("TK_RBRACE: " + yytext());
-                                            return new Symbol(sym.TK_RBRACE, yychar, yyline); }
-	{TK_LBRACK}                       { System.out.println("TK_LBRACK: " + yytext());
-                                            return new Symbol(sym.TK_LBRACK, yychar, yyline); }
-	{TK_RBRACK}                       { System.out.println("TK_RBRACK: " + yytext());
-                                            return new Symbol(sym.TK_RBRACK, yychar, yyline); }
-	{TK_SEMICOLON}                    { System.out.println("TK_SEMICOLON: " + yytext());
-                                            return new Symbol(sym.TK_SEMICOLON, yychar, yyline); }
-	{TK_COMMA}                        { System.out.println("TK_COMMA: " + yytext());
-                                            return new Symbol(sym.TK_COMMA, yychar, yyline); }
-	{TK_DOT}                          { System.out.println("TK_DOT: " + yytext());
-                                            return new Symbol(sym.TK_DOT, yychar, yyline); }
+	{TK_LPAREN}                       {return new Symbol(sym.TK_LPAREN, yycolumn, yyline); }
+	{TK_RPAREN}                       {return new Symbol(sym.TK_RPAREN, yycolumn, yyline); }
+	{TK_LBRACE}                       {return new Symbol(sym.TK_LBRACE, yycolumn, yyline); }
+	{TK_RBRACE}                       {return new Symbol(sym.TK_RBRACE, yycolumn, yyline); }
+	{TK_LBRACK}                       {return new Symbol(sym.TK_LBRACK, yycolumn, yyline); }
+	{TK_RBRACK}                       {return new Symbol(sym.TK_RBRACK, yycolumn, yyline); }
+	{TK_SEMICOLON}                    {return new Symbol(sym.TK_SEMICOLON, yycolumn, yyline); }
+	{TK_COMMA}                        {return new Symbol(sym.TK_COMMA, yycolumn, yyline); }
+	{TK_DOT}                          {return new Symbol(sym.TK_DOT, yycolumn, yyline); }
 
 	/* operators */
-	{TK_ASIG}                         { System.out.println("TK_ASIG: " + yytext());
-                                            return new Symbol(sym.TK_ASIG, yychar, yyline); }
-	{TK_OPLOG}                        { System.out.println("TK_OPLOG: " + yytext());
-                                            return new Symbol(sym.TK_OPLOG, yychar, yyline); }
-	{TK_OPMAT}                        { System.out.println("TK_OPMAT: " + yytext());
-                                            return new Symbol(sym.TK_OPMAT, yychar, yyline); }
-	{TK_OPREL}                        { System.out.println("TK_OPREL: " + yytext());
-                                            return new Symbol(sym.TK_OPREL, yychar, yyline); }
-	{TK_PLUSPLUS}                     { System.out.println("TK_PLUSPLUS: " + yytext());
-                                            return new Symbol(sym.TK_PLUSPLUS, yychar, yyline); }
-	{TK_MINUSMINUS}                   { System.out.println("TK_MINUSMINUS: " + yytext());
-                                            return new Symbol(sym.TK_MINUSMINUS, yychar, yyline); }
-        {TK_ADDLESS}                      { System.out.println("TK_ADDLESS: " + yytext());
-                                            return new Symbol(sym.TK_ADDLESS, yychar, yyline); }
+	{TK_ASIG}                         {return new Symbol(sym.TK_ASIG, yycolumn, yyline); }
+	{TK_OPLOG}                        {return new Symbol(sym.TK_OPLOG, yycolumn, yyline); }
+	{TK_OPMAT}                        {return new Symbol(sym.TK_OPMAT, yycolumn, yyline); }
+	{TK_OPREL}                        {return new Symbol(sym.TK_OPREL, yycolumn, yyline); }
+	{TK_PLUSPLUS}                     {return new Symbol(sym.TK_PLUSPLUS, yycolumn, yyline); }
+	{TK_MINUSMINUS}                   {return new Symbol(sym.TK_MINUSMINUS, yycolumn, yyline); }
+        {TK_ADDLESS}                      {return new Symbol(sym.TK_ADDLESS, yycolumn, yyline); }
 
  	/* numeric literals */
 	{ENDLINE}                         {}
 	{WHITESPACE}                      {}
 	{COMMENT_BEGIN}                   {yybegin(COMMENT);}
-	{INT} 				  { System.out.println("INT: " + yytext());
-                                            return new Symbol(sym.INT, yychar, yyline, yytext()); }
-        {STRING}                          { System.out.println("STRING" + yytext()); 
-                                            return new Symbol(sym.STRING, yychar, yyline, yytext()); }
-	{ID}                              { System.out.println("ID");
-                                            return new Symbol(sym.ID, yychar, yyline, yytext()); }	
-	.                                 { System.out.println("Error "+ yytext() +" en la linea "+ yyline + ", columna " + yycolumn);
-                                            throw new RuntimeException("Token desconocido: " +yytext()+" . Linea: "+(yyline)+", caracter: "+(yychar)); }
+	{INT} 				  {return new Symbol(sym.INT, yycolumn, yyline, yytext()); }
+        {STRING}                          {return new Symbol(sym.STRING, yycolumn, yyline, yytext()); }
+	{ID}                              {return new Symbol(sym.ID, yycolumn, yyline, yytext()); }	
+	.                                 {throw new RuntimeException("Token desconocido: " +yytext()+" . Linea: "+(yyline)+", columna: "+(yycolumn)); }
 }
 
 <COMMENT>{
