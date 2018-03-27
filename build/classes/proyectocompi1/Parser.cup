@@ -251,18 +251,19 @@ Parametros::= AritExp:ae TK_COMMA Parametros:ps
 /*Bloque Decision IF*/
 If::= TK_IF TK_LPAREN BoolExp:be TK_RPAREN Body:b Else:e
     {::}
-    |error Body:e Else:e
+    |error Body:b Else:e
+    {::}
     ;
 
 Else::= TK_ELSEIF TK_LPAREN BoolExp:be TK_RPAREN Body:b Else:e
     {::}
-    |TK_ELSE Body
+    |TK_ELSE Body:b
     {::}
     |/*Vacio Solo IF*/
     {::}
     ;
 
-Switch::= TK_SWITCH TK_LPAREN Valor:v /*Variable*/ TK_RPAREN SwitchContent:sc
+Switch::= TK_SWITCH TK_LPAREN ID:id TK_RPAREN SwitchContent:sc
     {::}
     |error SwitchContent:sc
     {::}
