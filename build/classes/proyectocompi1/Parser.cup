@@ -13,7 +13,7 @@ parser code {:
         StringBuffer sb = new StringBuffer();
         sb.append( message + ":");
         if (info instanceof java_cup.runtime.Symbol) {
-            sb.append("  Line: " + ((Symbol)info).left  +  ", column: " + ((Symbol)info).right +". Unexpected token: " 
+            sb.append("  Column: " + ((Symbol)info).left  +  ", Line: " + ((Symbol)info).right +". Unexpected token: " 
                 + getToken(((Symbol)info).sym) +  ". ");
         }
         errores.add(sb+"");
@@ -139,14 +139,9 @@ non terminal Node ParametrosFuncionLlamadaPrime;
 non terminal Node ValorImpresion;
 non terminal Node Leer;
 non terminal Node VarMulti;
-non terminal Node VariablesPrime;
+non terminal Node VariablePrime;
 
-Start::=TK_START VariablesPrime:vs Main:m TK_END
-    {::}
-    ;
-
-/*Variables*/
-Variables::= TK_SEMICOLON VarMulti:v
+Start::=TK_START VariablePrime:vp Main:m TK_END
     {::}
     ;
 
@@ -156,9 +151,14 @@ VariablePrime::= Variables:vs
     {::}
     ;
 
-VarMulti::= TK_VARIABLE_TIPO:vt ID:id TK_ASIG Valor:v VariablesPrime:vp
+/*Variables*/
+Variables::= VarMulti:v
     {::}
-    |Array:ar VariablesPrime:vp
+    ;
+
+VarMulti::= TK_VARIABLE_TIPO:vt ID:id TK_ASIG Valor:v  VariablePrime:vp
+    {::}
+    |Array:ar VariablePrime:vp
     {::}
     ;
 

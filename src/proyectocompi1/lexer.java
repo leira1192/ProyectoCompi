@@ -860,11 +860,11 @@ public class lexer implements java_cup.runtime.Scanner {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
-            { throw new RuntimeException("Token desconocido: " +yytext()+" . Linea: "+(yyline)+", columna: "+(yycolumn));
+            { throw new RuntimeException("Token desconocido: " +yytext()+" . Linea: "+(yyline + 1)+", columna: "+(yycolumn + 1));
             }
           case 51: break;
           case 2: 
-            { return new Symbol(sym.LETRA, yycolumn, yyline);
+            { return new Symbol(sym.LETRA, yycolumn + 1, yyline + 1);
             }
           case 52: break;
           case 3: 
@@ -872,59 +872,59 @@ public class lexer implements java_cup.runtime.Scanner {
             }
           case 53: break;
           case 4: 
-            { return new Symbol(sym.DIGIT, yycolumn, yyline);
+            { return new Symbol(sym.DIGIT, yycolumn + 1, yyline + 1);
             }
           case 54: break;
           case 5: 
-            { return new Symbol(sym.TK_COMILLA, yycolumn, yyline);
+            { return new Symbol(sym.TK_COMILLA, yycolumn + 1, yyline + 1);
             }
           case 55: break;
           case 6: 
-            { return new Symbol(sym.TK_LPAREN, yycolumn, yyline);
+            { return new Symbol(sym.TK_LPAREN, yycolumn + 1, yyline + 1);
             }
           case 56: break;
           case 7: 
-            { return new Symbol(sym.TK_RPAREN, yycolumn, yyline);
+            { return new Symbol(sym.TK_RPAREN, yycolumn + 1, yyline + 1);
             }
           case 57: break;
           case 8: 
-            { return new Symbol(sym.TK_LBRACE, yycolumn, yyline);
+            { return new Symbol(sym.TK_LBRACE, yycolumn + 1, yyline + 1);
             }
           case 58: break;
           case 9: 
-            { return new Symbol(sym.TK_RBRACE, yycolumn, yyline);
+            { return new Symbol(sym.TK_RBRACE, yycolumn + 1, yyline + 1);
             }
           case 59: break;
           case 10: 
-            { return new Symbol(sym.TK_LBRACK, yycolumn, yyline);
+            { return new Symbol(sym.TK_LBRACK, yycolumn + 1, yyline + 1);
             }
           case 60: break;
           case 11: 
-            { return new Symbol(sym.TK_RBRACK, yycolumn, yyline);
+            { return new Symbol(sym.TK_RBRACK, yycolumn + 1, yyline + 1);
             }
           case 61: break;
           case 12: 
-            { return new Symbol(sym.TK_SEMICOLON, yycolumn, yyline);
+            { return new Symbol(sym.TK_SEMICOLON, yycolumn + 1, yyline + 1);
             }
           case 62: break;
           case 13: 
-            { return new Symbol(sym.TK_COMMA, yycolumn, yyline);
+            { return new Symbol(sym.TK_COMMA, yycolumn + 1, yyline + 1);
             }
           case 63: break;
           case 14: 
-            { return new Symbol(sym.TK_DOT, yycolumn, yyline);
+            { return new Symbol(sym.TK_DOT, yycolumn + 1, yyline + 1);
             }
           case 64: break;
           case 15: 
-            { return new Symbol(sym.TK_ASIG, yycolumn, yyline);
+            { return new Symbol(sym.TK_ASIG, yycolumn + 1, yyline + 1);
             }
           case 65: break;
           case 16: 
-            { return new Symbol(sym.PLUS, yycolumn, yyline);
+            { return new Symbol(sym.PLUS, yycolumn + 1, yyline + 1);
             }
           case 66: break;
           case 17: 
-            { return new Symbol(sym.MINUS, yycolumn, yyline);
+            { return new Symbol(sym.MINUS, yycolumn + 1, yyline + 1);
             }
           case 67: break;
           case 18: 
@@ -932,7 +932,7 @@ public class lexer implements java_cup.runtime.Scanner {
             }
           case 68: break;
           case 19: 
-            { return new Symbol(sym.OPREL_NOT, yycolumn, yyline);
+            { return new Symbol(sym.OPREL_NOT, yycolumn + 1, yyline + 1);
             }
           case 69: break;
           case 20: 
@@ -944,119 +944,119 @@ public class lexer implements java_cup.runtime.Scanner {
             }
           case 71: break;
           case 22: 
-            { return new Symbol(sym.ID, yycolumn, yyline, yytext());
+            { return new Symbol(sym.ID, yycolumn + 1, yyline + 1, yytext());
             }
           case 72: break;
           case 23: 
-            { return new Symbol(sym.TK_OPREL, yycolumn, yyline);
+            { return new Symbol(sym.TK_OPREL, yycolumn + 1, yyline + 1);
             }
           case 73: break;
           case 24: 
-            { return new Symbol(sym.TK_OPLOG, yycolumn, yyline);
+            { return new Symbol(sym.TK_OPLOG, yycolumn + 1, yyline + 1);
             }
           case 74: break;
           case 25: 
-            { return new Symbol(sym.TK_IF, yycolumn, yyline);
+            { return new Symbol(sym.TK_IF, yycolumn + 1, yyline + 1);
             }
           case 75: break;
           case 26: 
-            { return new Symbol(sym.STRING, yycolumn, yyline, yytext());
+            { return new Symbol(sym.STRING, yycolumn + 1, yyline + 1, yytext());
             }
           case 76: break;
           case 27: 
-            { return new Symbol(sym.INT, yycolumn, yyline, yytext());
+            { return new Symbol(sym.INT, yycolumn + 1, yyline + 1, yytext());
             }
           case 77: break;
           case 28: 
-            { return new Symbol(sym.TK_MINUSMINUS, yycolumn, yyline);
+            { return new Symbol(sym.TK_MINUSMINUS, yycolumn + 1, yyline + 1);
             }
           case 78: break;
           case 29: 
-            { return new Symbol(sym.AND, yycolumn, yyline);
+            { return new Symbol(sym.AND, yycolumn + 1, yyline + 1);
             }
           case 79: break;
           case 30: 
-            { return new Symbol(sym.TK_END, yycolumn, yyline);
+            { return new Symbol(sym.TK_END, yycolumn + 1, yyline + 1);
             }
           case 80: break;
           case 31: 
-            { return new Symbol(sym.TK_OPMAT, yycolumn, yyline);
+            { return new Symbol(sym.TK_OPMAT, yycolumn + 1, yyline + 1);
             }
           case 81: break;
           case 32: 
-            { return new Symbol(sym.TK_VARIABLE_TIPO, yycolumn, yyline);
+            { return new Symbol(sym.TK_VARIABLE_TIPO, yycolumn + 1, yyline + 1);
             }
           case 82: break;
           case 33: 
-            { return new Symbol(sym.TK_FOR, yycolumn, yyline);
+            { return new Symbol(sym.TK_FOR, yycolumn + 1, yyline + 1);
             }
           case 83: break;
           case 34: 
-            { return new Symbol(sym.BOOLEAN, yycolumn, yyline);
+            { return new Symbol(sym.BOOLEAN, yycolumn + 1, yyline + 1);
             }
           case 84: break;
           case 35: 
-            { return new Symbol(sym.TK_THEN, yycolumn, yyline);
+            { return new Symbol(sym.TK_THEN, yycolumn + 1, yyline + 1);
             }
           case 85: break;
           case 36: 
-            { return new Symbol(sym.TK_ELSE, yycolumn, yyline);
+            { return new Symbol(sym.TK_ELSE, yycolumn + 1, yyline + 1);
             }
           case 86: break;
           case 37: 
-            { return new Symbol(sym.TK_NULL, yycolumn, yyline);
+            { return new Symbol(sym.TK_NULL, yycolumn + 1, yyline + 1);
             }
           case 87: break;
           case 38: 
-            { return new Symbol(sym.TK_CASE, yycolumn, yyline);
+            { return new Symbol(sym.TK_CASE, yycolumn + 1, yyline + 1);
             }
           case 88: break;
           case 39: 
-            { return new Symbol(sym.TK_FUNC, yycolumn, yyline);
+            { return new Symbol(sym.TK_FUNC, yycolumn + 1, yyline + 1);
             }
           case 89: break;
           case 40: 
-            { return new Symbol(sym.TK_START, yycolumn, yyline);
+            { return new Symbol(sym.TK_START, yycolumn + 1, yyline + 1);
             }
           case 90: break;
           case 41: 
-            { return new Symbol(sym.TK_ARRAY, yycolumn, yyline);
+            { return new Symbol(sym.TK_ARRAY, yycolumn + 1, yyline + 1);
             }
           case 91: break;
           case 42: 
-            { return new Symbol(sym.TK_BREAK, yycolumn, yyline);
+            { return new Symbol(sym.TK_BREAK, yycolumn + 1, yyline + 1);
             }
           case 92: break;
           case 43: 
-            { return new Symbol(sym.TK_WHILE, yycolumn, yyline);
+            { return new Symbol(sym.TK_WHILE, yycolumn + 1, yyline + 1);
             }
           case 93: break;
           case 44: 
-            { return new Symbol(sym.TK_SWITCH, yycolumn, yyline);
+            { return new Symbol(sym.TK_SWITCH, yycolumn + 1, yyline + 1);
             }
           case 94: break;
           case 45: 
-            { return new Symbol(sym.TK_RETURN, yycolumn, yyline);
+            { return new Symbol(sym.TK_RETURN, yycolumn + 1, yyline + 1);
             }
           case 95: break;
           case 46: 
-            { return new Symbol(sym.TK_ELSEIF, yycolumn, yyline);
+            { return new Symbol(sym.TK_ELSEIF, yycolumn + 1, yyline + 1);
             }
           case 96: break;
           case 47: 
-            { return new Symbol(sym.TK_DEFAULT, yycolumn, yyline);
+            { return new Symbol(sym.TK_DEFAULT, yycolumn + 1, yyline + 1);
             }
           case 97: break;
           case 48: 
-            { return new Symbol(sym.TK_INPUT, yycolumn, yyline);
+            { return new Symbol(sym.TK_INPUT, yycolumn + 1, yyline + 1);
             }
           case 98: break;
           case 49: 
-            { return new Symbol(sym.TK_PRINT, yycolumn, yyline);
+            { return new Symbol(sym.TK_PRINT, yycolumn + 1, yyline + 1);
             }
           case 99: break;
           case 50: 
-            { return new Symbol(sym.TK_ADDLESS, yycolumn, yyline);
+            { return new Symbol(sym.TK_ADDLESS, yycolumn + 1, yyline + 1);
             }
           case 100: break;
           default:
