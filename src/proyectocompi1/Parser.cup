@@ -57,6 +57,8 @@ terminal OR;
 terminal AND;
 terminal BOOLEAN;
 terminal OPREL_NOT;
+terminal PLUS;
+terminal MINUS;
 
 
 
@@ -79,6 +81,9 @@ non terminal Node Exp;
 non terminal Node ArrayE;
 non terminal Node FunCall;
 non terminal Node Sor;
+non terminal Node If;
+non terminal Node Else;
+non terminal ArrayList<Node> SwitchContent;
 
 Start::=TK_START Variables:vs Main:m TK_END
     {:
@@ -88,7 +93,7 @@ Start::=TK_START Variables:vs Main:m TK_END
     |TK_START Variables:vs Main:m error
     ;
 
-
+/*Variables*/
 Variables::= TK_SEMICOLON TK_VARIABLE_TIPO:vt ID:id TK_ASIG Valor:v Variables:vs
     {:
     
@@ -98,6 +103,7 @@ Variables::= TK_SEMICOLON TK_VARIABLE_TIPO:vt ID:id TK_ASIG Valor:v Variables:vs
     |/*Vacio*/
     ;
 
+/*Valores de Variables Tipos*/
 Valor::= INT:i {::}
     |STRING:s {::}
     |CHAR:l {::}
@@ -107,6 +113,7 @@ Valor::= INT:i {::}
     |error
     ;
 
+/*Arreglo*/
 Array::= TK_ARRAY:ar TK_DOT TK_VARIABLE_TIPO:vt TK_DOT INT:i ID:id TK_ASIG ArrayContent
     {:
 
@@ -129,6 +136,7 @@ Content::= Valor:v TK_COMMA Content:c
     |Valor:v
     ;
 
+/*Cliclo FOR*/
 For::= TK_FOR TK_LPAREN TK_INT ID:id1 TK_ASIG INT:i1 TK_SEMICOLON ID:id2 TK_OPLOG INT:i2 TK_SEMICOLON ID:id3 TK_ADDLESS:al TK_RPAREN Body:b
     {:
     
@@ -143,7 +151,8 @@ Body::= TK_START Main:m TK_END
     |error Main:m TK_END
     ;
 
-While::= TK_WHILE TK_LPAREN BoolExp:be TK_RPAREN Body:b
+/*Ciclo While*/
+W1hile::= TK_WHILE TK_LPAREN BoolExp:be TK_RPAREN Body:b
     {:
     
     :}
@@ -180,9 +189,15 @@ BoolExp3::= AritExp:ae TK_OPREL:op AritExp:ae2
     {::}
     ;
 
-AritExp::= AritExp:ae Sor:sor MultiExp:me /*non terminal SOR*/
+AritExp::= AritExp:ae Sor:sor MultiExp:me
     {::}
     |Exp:e
+    {::}
+    ;
+
+Sor::= TK_MINUS:min
+    {::}
+    |TK_PLUS:max
     {::}
     ;
 
@@ -200,22 +215,57 @@ Exp::= ID:id
     {::}
     |STRING:s
     {::}
-    |FunCall:fc /*non terminal FunCall*/
+    |FunCall:fc
     {::}
-    |ArrayE:ae /*non terminal ArrayE*/
+    |ArrayE:ae
     {::}
     |TK_LPAREN AritExp:ae TK_RPAREN
     {::}
     ;
 
-ArrayE::=
+ArrayE::= TK_LBRACK AritExp:ae TK_RBRACK
     {::}
     ;
 
-FunCall::=
+/*Funcion*/
+FunCall::= TK_FUNC ID:id TK_LPAREN Parametros:ps TK_RPAREN Body:b
     {::}
     ;
 
-Sor::=
+Parametros::= AritExp:ae TK_COMMA Parametros:ps
+    {::}
+    |BOOLEAN:b TK_COMMA Parametros:ps
+    {::}
+    |AritExp:ae
+    {::}
+    |BOOLEAN:b
+    {::}
+    |/*No existen mas parametros*/
+    {::}
+    ;
+
+/*Bloque Decision IF*/
+If::= TK_IF TK_LPAREN BoolExp:be TK_RPAREN Body:b Else:e
+    {::}
+    |error Body:e Else:e
+    ;
+
+Else::= TK_ELSEIF TK_LPAREN BoolExp:be TK_RPAREN Body:b Else:e
+    {::}
+    |TK_ELSE Body
+    {::}
+    |/*Vacio Solo IF*/
+    {::}
+    ;
+
+Switch::= TK_SWITCH TK_LPAREN Valor:v /*Variable*/ TK_RPAREN SwitchContent:sc
+    {::}
+    |error SwitcContent:sc
+    {::}
+    ;
+
+SwitchContet:= TK_CASE ID:id Body:b TK_BREAK TK_SEMICOLON SwitchContent;sc
+    {::}
+    |TK_DEFAULT Body:b TK_BREAK TK_SEMICOLON
     {::}
     ;

@@ -111,6 +111,10 @@ COMMENT_END = [**/]
 %%
 
 <YYINITIAL>{
+        {PLUS}                            { System.out.println("PLUS: ");
+                                            return new Symbol(sym.PLUS, yychar, yyline); }
+        {MINUS}                           { System.out.println("MINUS: ");
+                                            return new Symbol(sym.MINUS, yychar, yyline); }
         {OPREL_NOT}                       { System.out.println("OPREL_NOT: ");
                                             return new Symbol(sym.OPREL_NOT, yychar, yyline); }
         {BOOLEAN}                         { System.out.println("BOOLEAN: ");
