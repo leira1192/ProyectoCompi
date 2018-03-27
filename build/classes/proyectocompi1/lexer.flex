@@ -41,6 +41,7 @@ ID = {LETRA}({LETRA}|{DIGIT})*
 //Lectura y Escritura
 TK_INPUT = FFinput
 TK_PRINT = FFprint
+TK_COMILLA = \"
 
 //switch case
 TK_BREAK = break
@@ -112,6 +113,8 @@ COMMENT_END = [**/]
 %%
 
 <YYINITIAL>{
+        {TK_COMILLA}                      { System.out.println("TK_COMILLA: ");
+                                            return new Symbol(sym.TK_COMILLA, yychar, yyline); }
         {TK_ELSEIF}                       { System.out.println("TK_ELSEIF: ");
                                             return new Symbol(sym.TK_ELSEIF, yychar, yyline); }
         {PLUS}                            { System.out.println("PLUS: ");

@@ -60,6 +60,7 @@ terminal OPREL_NOT;
 terminal PLUS;
 terminal MINUS;
 terminal TK_ELSEIF;
+terminal TK_COMILLA;
 
 
 
@@ -80,6 +81,7 @@ non terminal Node AritExp;
 non terminal Node MultiExp;
 non terminal Node Exp;
 non terminal Node ArrayE;
+non terminal Node Function;
 non terminal Node FunCall;
 non terminal Node Sor;
 non terminal Node If;
@@ -87,24 +89,36 @@ non terminal Node Else;
 non terminal ArrayList<Node> SwitchContent;
 non terminal ArrayList<Node> Parametros;
 non terminal Node Switch;
+non terminal Node Asignar;
+non terminal Node Imprimir;
+non terminal ArrayList<Node> ImpContent;
+non terminal Node ParametrosPrime;
+non terminal ArrayList<Node> ParametrosFuncionLlamada;
+non terminal Node ParametrosFuncionLlamadaPrime;
+non terminal Node ValorImpresion;
+non terminal Node Leer;
+non terminal Node VarMulti;
+non terminal Node VariablesPrime;
 
-
-Start::=TK_START Variables:vs Main:m TK_END
-    {:
-
-    :}
-    |error Variables:vs Main:m TK_END
-    |TK_START Variables:vs Main:m error
+Start::=TK_START VariablesPrime:vs Main:m TK_END
+    {::}
     ;
 
 /*Variables*/
-Variables::= TK_SEMICOLON TK_VARIABLE_TIPO:vt ID:id TK_ASIG Valor:v Variables:vs
-    {:
-    
-    :}
-    |TK_SEMICOLON Array:ar Variables:vs
-    |error Valor:v Variables:vs
-    |/*Vacio*/
+Variables::= TK_SEMICOLON VarMulti:v
+    {::}
+    ;
+
+VariablePrime::= Variables:vs
+    {::}
+    |
+    {::}
+    ;
+
+VarMulti::= TK_VARIABLE_TIPO:vt ID:id TK_ASIG Valor:v VariablesPrime:vp
+    {::}
+    |Array:ar VariablesPrime:vp
+    {::}
     ;
 
 /*Valores de Variables Tipos*/
@@ -114,73 +128,47 @@ Valor::= INT:i {::}
     |TK_TRUE:t {::}
     |TK_FALSE:f {::}
     |ID:id {::}
-    |error
     ;
 
 /*Arreglo*/
 Array::= TK_ARRAY:ar TK_DOT TK_VARIABLE_TIPO:vt TK_DOT INT:i ID:id TK_ASIG ArrayContent
-    {:
-
-    :}
-    |error ArrayContent
+    {::}
     ;
 
 ArrayContent::= TK_LBRACK Content:c TK_RBRACK
-    {:
-
-    :}
+    {::}
     |TK_LBRACK TK_RBRACK
-    |error TK_RBRACK /**/
     ;
 
 Content::= Valor:v TK_COMMA Content:c
-    {:
-
-    :}
+    {::}
     |Valor:v
     ;
 
 /*Cliclo FOR*/
 For::= TK_FOR TK_LPAREN TK_INT ID:id1 TK_ASIG INT:i1 TK_SEMICOLON ID:id2 TK_OPLOG INT:i2 TK_SEMICOLON ID:id3 TK_ADDLESS:al TK_RPAREN Body:b
-    {:
-    
-    :}
-    |error Body:b
+    {::}
     ;
 
 Body::= TK_START Main:m TK_END
-    {:
-    
-    :}
-    |error Main:m TK_END
+    {::}
     ;
 
 /*Ciclo While*/
 While::= TK_WHILE TK_LPAREN BoolExp:be TK_RPAREN Body:b
-    {:
-    
-    :}
-    |error BoolExp:be TK_RPAREN Body:b
+    {::}
     ;
 
 BoolExp::= BoolExp:be OR BoolExp2:be2
-    {:
-    
-    :}
+    {::}
     |BoolExp2:be2
-    {:
-    
-    :}
+    {::}
     ;
 
 BoolExp2::= BoolExp2:be2 AND BoolExp3:be3
-    {:
-    
-    :}
+    {::}
     |BoolExp3:be3
-    {:
-    
-    :}
+    {::}
     ;
 
 BoolExp3::= AritExp:ae TK_OPREL:op AritExp:ae2
@@ -231,27 +219,9 @@ ArrayE::= TK_LBRACK AritExp:ae TK_RBRACK
     {::}
     ;
 
-/*Funcion*/
-FunCall::= TK_FUNC ID:id TK_LPAREN Parametros:ps TK_RPAREN Body:b
-    {::}
-    ;
-
-Parametros::= AritExp:ae TK_COMMA Parametros:ps
-    {::}
-    |BOOLEAN:b TK_COMMA Parametros:ps
-    {::}
-    |AritExp:ae
-    {::}
-    |BOOLEAN:b
-    {::}
-    |/*No existen mas parametros*/
-    {::}
-    ;
 
 /*Bloque Decision IF*/
 If::= TK_IF TK_LPAREN BoolExp:be TK_RPAREN Body:b Else:e
-    {::}
-    |error Body:b Else:e
     {::}
     ;
 
@@ -265,12 +235,87 @@ Else::= TK_ELSEIF TK_LPAREN BoolExp:be TK_RPAREN Body:b Else:e
 
 Switch::= TK_SWITCH TK_LPAREN ID:id TK_RPAREN SwitchContent:sc
     {::}
-    |error SwitchContent:sc
-    {::}
     ;
 
 SwitchContent::= TK_CASE ID:id Body:b TK_BREAK TK_SEMICOLON SwitchContent:sc
     {::}
     |TK_DEFAULT Body:b TK_BREAK TK_SEMICOLON
     {::}
+    ;
+
+/*Funcion*/
+Function::= TK_FUNC ID:id TK_LPAREN ParametrosPrime:pp TK_RPAREN Body:b
+    {::}
+    ;
+
+ParametrosPrime::= Parametros:ps
+    {::}
+    | /*Vacio*/
+    {::}
+    ;
+
+Parametros::= TK_VARIABLE_TIPO:vt ID:id TK_COMMA Parametros:ps
+    {::}
+    |TK_ARRAY:a ID:id TK_COMMA Parametros:ps
+    {::}
+    |TK_ARRAY:a ID:id
+    {::}
+    |TK_VARIABLE_TIPO:vt ID:id
+    {::}
+    ;
+
+FunCall::= TK_SEMICOLON ID:id TK_LPAREN ParametrosFuncionLlamadaPrime:pflp TK_RPAREN
+    {::}
+    ;
+
+ParametrosFuncionLlamadaPrime::= ParametrosFuncionLlamada:pfl
+    {::}
+    | /*Vacio*/
+    {::}
+    ;
+
+ParametrosFuncionLlamada::= ID:id TK_COMMA ParametrosFuncionLlamada:pfl
+    {::}
+    |ID:id
+    {::}
+    ;
+
+
+Asignar::= TK_SEMICOLON ID:id TK_ASIG Valor:v
+    {::}
+    ;
+
+Imprimir::= TK_SEMICOLON TK_PRINT TK_LBRACK ImpContent:ic TK_RBRACK 
+    {::}
+    ;
+
+ImpContent::= TK_COMILLA STRING:s TK_COMILLA PLUS ImpContent:ic
+    {::}
+    |TK_COMILLA STRING:s TK_COMILLA
+    {::} /*Termina impresion*/
+    |ValorImpresion:vi PLUS ImpContent:ic
+    {::}
+    |ValorImpresion:vi
+    {::}
+    ;
+
+ValorImpresion::= ID:id {::}
+    |FunCall:fc {::}
+    ;
+
+Leer::= TK_SEMICOLON TK_INPUT ID:id
+    {::}
+    ;
+
+Main::= For:f Main:m {::}
+    |While:w Main:m {::}
+    |If:i Main:m {::}
+    |Switch:s Main:m {::}
+    |Function:fn Main:m {::}
+    |FunCall:fc Main:m {::}
+    |Imprimir:imp Main:m {::}
+    |Leer:l Main:m {::}
+    |Asignar:a Main:m {::}
+    |{::} /*Vacio para terminar*/
+    |error Main
     ;
