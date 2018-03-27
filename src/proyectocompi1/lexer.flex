@@ -57,6 +57,7 @@ TK_RETURN =return
 TK_IF = if
 TK_THEN = then
 TK_ELSE = else
+TK_ELSEIF = elseif
 
 //While Case
 TK_WHILE = while
@@ -111,6 +112,8 @@ COMMENT_END = [**/]
 %%
 
 <YYINITIAL>{
+        {TK_ELSEIF}                       { System.out.println("TK_ELSEIF: ");
+                                            return new Symbol(sym.TK_ELSEIF, yychar, yyline); }
         {PLUS}                            { System.out.println("PLUS: ");
                                             return new Symbol(sym.PLUS, yychar, yyline); }
         {MINUS}                           { System.out.println("MINUS: ");

@@ -59,6 +59,7 @@ terminal BOOLEAN;
 terminal OPREL_NOT;
 terminal PLUS;
 terminal MINUS;
+terminal TK_ELSEIF;
 
 
 
@@ -84,6 +85,9 @@ non terminal Node Sor;
 non terminal Node If;
 non terminal Node Else;
 non terminal ArrayList<Node> SwitchContent;
+non terminal ArrayList<Node> Parametros;
+non terminal Node Switch;
+
 
 Start::=TK_START Variables:vs Main:m TK_END
     {:
@@ -152,7 +156,7 @@ Body::= TK_START Main:m TK_END
     ;
 
 /*Ciclo While*/
-W1hile::= TK_WHILE TK_LPAREN BoolExp:be TK_RPAREN Body:b
+While::= TK_WHILE TK_LPAREN BoolExp:be TK_RPAREN Body:b
     {:
     
     :}
@@ -195,9 +199,9 @@ AritExp::= AritExp:ae Sor:sor MultiExp:me
     {::}
     ;
 
-Sor::= TK_MINUS:min
+Sor::= MINUS:min
     {::}
-    |TK_PLUS:max
+    |PLUS:max
     {::}
     ;
 
@@ -260,11 +264,11 @@ Else::= TK_ELSEIF TK_LPAREN BoolExp:be TK_RPAREN Body:b Else:e
 
 Switch::= TK_SWITCH TK_LPAREN Valor:v /*Variable*/ TK_RPAREN SwitchContent:sc
     {::}
-    |error SwitcContent:sc
+    |error SwitchContent:sc
     {::}
     ;
 
-SwitchContet:= TK_CASE ID:id Body:b TK_BREAK TK_SEMICOLON SwitchContent;sc
+SwitchContent::= TK_CASE ID:id Body:b TK_BREAK TK_SEMICOLON SwitchContent:sc
     {::}
     |TK_DEFAULT Body:b TK_BREAK TK_SEMICOLON
     {::}
