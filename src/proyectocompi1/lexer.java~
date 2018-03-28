@@ -968,7 +968,7 @@ public class lexer implements java_cup.runtime.Scanner {
             }
           case 77: break;
           case 28: 
-            { return new Symbol(sym.TK_MINUSMINUS, yycolumn + 1 + 1, yyline + 1);
+            { return new Symbol(sym.TK_MINUSMINUS, yycolumn + 1, yyline + 1);
             }
           case 78: break;
           case 29: 
@@ -980,7 +980,7 @@ public class lexer implements java_cup.runtime.Scanner {
             }
           case 80: break;
           case 31: 
-            { return new Symbol(sym.TK_OPMAT, yycolumn + 1yycolumn + 1, yyline + 1);
+            { return new Symbol(sym.TK_OPMAT, yycolumn + 1, yyline + 1);
             }
           case 81: break;
           case 32: 
@@ -1056,7 +1056,7 @@ public class lexer implements java_cup.runtime.Scanner {
             }
           case 99: break;
           case 50: 
-            { return new Symbol(sym.TK_ADDLESS, yycolumn + 1 + 1, yyline + 1);
+            { return new Symbol(sym.TK_ADDLESS, yycolumn + 1, yyline + 1);
             }
           case 100: break;
           default:

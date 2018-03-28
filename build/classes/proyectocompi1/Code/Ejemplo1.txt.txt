@@ -1,5 +1,5 @@
 start
-	int var1 = 23
+	int var1 = 0
 	string var2 = "No le falta nada"
 	char var3 = a
 	bool var4 = true
