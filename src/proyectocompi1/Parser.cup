@@ -7,7 +7,8 @@ import java.lang.reflect.*;
 
 parser code {:
     ArrayList<String> errores = new ArrayList();
-
+    Node Padre = new Node("Root",1,1);
+    
     @Override
     public void report_error(String message, Object info) {
         StringBuffer sb = new StringBuffer();
@@ -64,8 +65,6 @@ terminal TK_RETURN;
 terminal TK_WHILE;
 terminal TK_PRINT;
 terminal TK_INPUT;
-terminal TK_TRUE;
-terminal TK_FALSE;
 terminal TK_NULL;
 terminal TK_LPAREN;
 terminal TK_RPAREN;
@@ -80,16 +79,12 @@ terminal TK_ASIG;
 terminal TK_OPLOG;
 terminal TK_OPMAT;
 terminal TK_OPREL;
-terminal TK_PLUSPLUS;
-terminal TK_MINUSMINUS;
 terminal TK_ADDLESS;
 terminal ID;
 terminal ENDLINE;
 terminal WHITESPACE;
 terminal COMMENT_BEGIN;
 terminal COMMENT_END;
-terminal LETRA;
-terminal DIGIT;
 terminal INT;
 terminal STRING;
 terminal TK_ARRAY;
@@ -102,12 +97,13 @@ terminal PLUS;
 terminal MINUS;
 terminal TK_ELSEIF;
 terminal TK_COMILLA;
+terminal TK_COMILLASIMPLE;
 
 
 
 non terminal Node Start;
 non terminal ArrayList<Node> Main;
-non terminal Node Variables;
+non terminal ArrayList<Node> Variables;
 non terminal Node Valor;
 non terminal Node Array;
 non terminal Node ArrayContent;
@@ -138,37 +134,87 @@ non terminal ArrayList<Node> ParametrosFuncionLlamada;
 non terminal Node ParametrosFuncionLlamadaPrime;
 non terminal Node ValorImpresion;
 non terminal Node Leer;
-non terminal Node VarMulti;
-non terminal Node VariablePrime;
+non terminal ArrayList<Node> VarMulti;
+non terminal ArrayList<Node> VariablePrime;
+non terminal Node Operador;
 
 Start::=TK_START VariablePrime:vp Main:m TK_END
-    {::}
+    {:
+        RESULT = parser.Padre;
+        if(vp != null){
+            Node temp = new Node("Var Init", vpright, vpleft);
+            temp.addListNode(vp);
+            RESULT.addNode(temp);
+        }
+        if(m != null){
+            Node temp2 = new Node("Main", mright, mleft);
+            temp2.addListNode(m);
+            RESULT.addNode(temp2);    
+        }
+    :}
     ;
 
 VariablePrime::= Variables:vs
-    {::}
+    {:
+        RESULT = vs;
+    :}
     |
-    {::}
+    {:
+        RESULT = null;
+    :}
     ;
 
 /*Variables*/
 Variables::= VarMulti:v
-    {::}
+    {:RESULT = v;:}
     ;
 
 VarMulti::= TK_VARIABLE_TIPO:vt ID:id TK_ASIG Valor:v  VariablePrime:vp
-    {::}
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node(vt + "", vtright, vtleft);
+        Node temp2 = new Node("ID: " + id, idright, idleft);
+        Node temp3 = new Node(v.getVal(), vright, vleft);
+        temp.addNode(temp2);
+        temp.addNode(temp3);
+        arreglo.add(temp);
+        if(vp != null){
+            arreglo.addAll(vp);
+        }
+        RESULT = arreglo;
+    :}
     |Array:ar VariablePrime:vp
-    {::}
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+    :}
     ;
 
 /*Valores de Variables Tipos*/
-Valor::= INT:i {::}
-    |STRING:s {::}
-    |CHAR:l {::}
-    |TK_TRUE:t {::}
-    |TK_FALSE:f {::}
-    |ID:id {::}
+Valor::= INT:i 
+    {:
+        Node temp = new Node(i + "", iright, ileft);
+        RESULT = temp;
+    :}
+    |STRING:s 
+    {:
+        Node temp = new Node(s + "", sright, sleft);
+        RESULT = temp;
+    :}
+    |CHAR:c 
+    {:
+        Node temp = new Node(c + "", cright, cleft);
+        RESULT = temp;
+    :}
+    |BOOLEAN:b 
+    {:
+        Node temp = new Node(b + "", bright, bleft);
+        RESULT = temp;
+    :}
+    |ID:id 
+    {:
+        Node temp = new Node(id + "", idright, idleft);
+        RESULT = temp;
+    :}
     ;
 
 /*Arreglo*/
@@ -186,8 +232,8 @@ Content::= Valor:v TK_COMMA Content:c
     |Valor:v
     ;
 
-/*Cliclo FOR*/
-For::= TK_FOR TK_LPAREN TK_INT ID:id1 TK_ASIG INT:i1 TK_SEMICOLON ID:id2 TK_OPLOG INT:i2 TK_SEMICOLON ID:id3 TK_ADDLESS:al TK_RPAREN Body:b
+/*Cliclo*/
+For::= TK_FOR TK_LPAREN TK_VARIABLE_TIPO ID:id1 TK_ASIG INT:i1 TK_SEMICOLON ID:id2 TK_OPLOG INT:i2 TK_SEMICOLON ID:id3 TK_ADDLESS:al TK_RPAREN Body:b
     {::}
     ;
 
@@ -212,13 +258,19 @@ BoolExp2::= BoolExp2:be2 AND BoolExp3:be3
     {::}
     ;
 
-BoolExp3::= AritExp:ae TK_OPREL:op AritExp:ae2
+BoolExp3::= AritExp:ae Operador:o AritExp:ae2
     {::}
     |BOOLEAN:b
     {::}
     |TK_LPAREN BoolExp:be TK_RPAREN
     {::}
     |OPREL_NOT TK_LPAREN BoolExp:be TK_RPAREN
+    {::}
+    ;
+
+Operador::= TK_OPREL:op
+    {::}
+    |TK_OPLOG:op
     {::}
     ;
 
@@ -330,9 +382,9 @@ Imprimir::= TK_SEMICOLON TK_PRINT TK_LBRACK ImpContent:ic TK_RBRACK
     {::}
     ;
 
-ImpContent::= TK_COMILLA STRING:s TK_COMILLA PLUS ImpContent:ic
+ImpContent::= STRING:s PLUS ImpContent:ic
     {::}
-    |TK_COMILLA STRING:s TK_COMILLA
+    | STRING:s
     {::} /*Termina impresion*/
     |ValorImpresion:vi PLUS ImpContent:ic
     {::}

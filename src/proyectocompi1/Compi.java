@@ -163,12 +163,11 @@ public class Compi extends javax.swing.JFrame {
     private void BFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BFileActionPerformed
         try {
             JFileChooser chooser = new JFileChooser("src\\proyectocompi1\\Code");
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("txt");
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("txt","txt");
             chooser.setFileFilter(filter);
-            chooser.showDialog(null, "Accept");
+            chooser.showDialog(this, "Accept");
             file = chooser.getSelectedFile();
             TFFile.setText(file.toString());
-
             List<String> content = Files.readAllLines(file.toPath());
             String texto = "";
             for (int i = 0; i < content.size(); i++) {
@@ -198,9 +197,7 @@ public class Compi extends javax.swing.JFrame {
             try{
                 parser p = new parser(scanner);
                 p.parse();
-               // p.ASTree.print("",true,txtArbol);
-                String scope= "";
-                //p.ASTree.exec(scope,0);
+                p.Padre.print("",true,TAForest);
             }catch (Exception e){
                 System.out.println(e);
             }

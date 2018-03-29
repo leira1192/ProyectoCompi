@@ -1,7 +1,7 @@
 start
 	int var1 = 0
 	string var2 = "No le falta nada"
-	char var3 = a
+	char var3 = 'a'
 	bool var4 = true
 	array.int.4 var5 = [1,2,4,5]
 	for (int i = 0; i <= var1; i++) start
