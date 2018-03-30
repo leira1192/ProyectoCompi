@@ -105,11 +105,11 @@ non terminal Node Start;
 non terminal ArrayList<Node> Main;
 non terminal ArrayList<Node> Variables;
 non terminal Node Valor;
-non terminal Node Array;
-non terminal Node ArrayContent;
+non terminal ArrayList<Node> Array;
+non terminal ArrayList<Node> ArrayContent;
 non terminal ArrayList<Node> Content;
 non terminal Node For;
-non terminal Node Body;
+non terminal ArrayList<Node> Body;
 non terminal Node While;
 non terminal Node BoolExp;
 non terminal Node BoolExp2;
@@ -122,7 +122,7 @@ non terminal Node Function;
 non terminal Node FunCall;
 non terminal Node Sor;
 non terminal Node If;
-non terminal Node Else;
+non terminal ArrayList<Node> Else;
 non terminal ArrayList<Node> SwitchContent;
 non terminal ArrayList<Node> Parametros;
 non terminal Node Switch;
@@ -137,6 +137,14 @@ non terminal Node Leer;
 non terminal ArrayList<Node> VarMulti;
 non terminal ArrayList<Node> VariablePrime;
 non terminal Node Operador;
+
+precedence left PLUS;
+precedence left MINUS;
+precedence left TK_OPLOG;
+precedence left TK_OPMAT;
+precedence left OPREL_NOT;
+precedence left TK_OPREL;
+precedence left error;
 
 Start::=TK_START VariablePrime:vp Main:m TK_END
     {:
@@ -186,6 +194,14 @@ VarMulti::= TK_VARIABLE_TIPO:vt ID:id TK_ASIG Valor:v  VariablePrime:vp
     |Array:ar VariablePrime:vp
     {:
         ArrayList<Node> arreglo = new ArrayList<Node>();
+        if(ar != null){
+            arreglo.addAll(ar);
+        }
+        RESULT = arreglo;
+        if(vp != null){
+            arreglo.addAll(vp);
+        }
+        RESULT = arreglo;
     :}
     ;
 
@@ -218,197 +234,594 @@ Valor::= INT:i
     ;
 
 /*Arreglo*/
-Array::= TK_ARRAY:ar TK_DOT TK_VARIABLE_TIPO:vt TK_DOT INT:i ID:id TK_ASIG ArrayContent
-    {::}
+Array::= TK_ARRAY:ar TK_DOT TK_VARIABLE_TIPO:vt TK_DOT INT:i ID:id TK_ASIG ArrayContent:ac
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node(ar + "", arright, arleft);
+        Node temp2 = new Node(vt + "", vtright, vtleft);
+        Node temp3 = new Node("Size: " + i, iright, ileft);
+        Node temp4 = new Node("ID: " + id, idright, idleft);
+        temp.addNode(temp2);
+        temp.addNode(temp3);
+        temp.addNode(temp4);
+        if(ac != null){
+            temp.addListNode(ac);;
+        }
+        arreglo.add(temp);
+        RESULT = arreglo;
+    :}
     ;
 
 ArrayContent::= TK_LBRACK Content:c TK_RBRACK
-    {::}
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        if(c != null){
+            arreglo.addAll(c);
+        }
+        RESULT = arreglo;
+    :}
     |TK_LBRACK TK_RBRACK
+    {:RESULT = null;:}
     ;
 
 Content::= Valor:v TK_COMMA Content:c
-    {::}
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node("val: " + v.getVal(), vright, vleft);
+        arreglo.add(temp);
+        if(c != null){
+            arreglo.addAll(c);
+        }
+        RESULT = arreglo;
+    :}
     |Valor:v
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node("val: " + v.getVal(), vright, vleft);
+        arreglo.add(temp);
+        RESULT = arreglo;
+    :}
     ;
 
 /*Cliclo*/
-For::= TK_FOR TK_LPAREN TK_VARIABLE_TIPO ID:id1 TK_ASIG INT:i1 TK_SEMICOLON ID:id2 TK_OPLOG INT:i2 TK_SEMICOLON ID:id3 TK_ADDLESS:al TK_RPAREN Body:b
-    {::}
+For::= TK_FOR:f TK_LPAREN TK_VARIABLE_TIPO:vt ID:id1 TK_ASIG:as INT:i1 TK_SEMICOLON ID:id2 TK_OPLOG:ol INT:i2 TK_SEMICOLON ID:id3 TK_ADDLESS:al TK_RPAREN Body:b
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node(f + "", fright, fleft);
+        Node temp1 = new Node(as + "", asright, asleft);
+        Node temp2 = new Node("ID: " + id1, id1right, id1left);
+        Node temp3 = new Node("Init: " + i1, i1right, i1left);
+        temp1.addNode(temp2);
+        temp1.addNode(temp3);
+        Node temp4 = new Node("Operador: " + ol, olright, olleft);
+        Node temp5 = new Node("ID: " + id2, id1right, id1left);
+        Node temp6 = new Node("To: " + i2, i1right, i1left);
+        temp4.addNode(temp5);
+        temp4.addNode(temp6);
+        Node temp7 = new Node("Add Less: " + al, alright, alleft);
+        Node temp8 = new Node("ID: " + id3, id3right, id3left);
+        temp7.addNode(temp8);
+        temp.addNode(temp1);
+        temp.addNode(temp4);
+        temp.addNode(temp7);
+        if(b != null){
+            Node temp9 = new Node("Body", bright, bleft);
+            temp9.addListNode(b);
+            temp.addNode(temp9);
+        }
+        RESULT = temp;
+    :}
     ;
 
 Body::= TK_START Main:m TK_END
-    {::}
+    {:
+        if(m != null){
+            RESULT = m;
+        }else{
+            RESULT = null;
+        }
+    :}
     ;
 
 /*Ciclo While*/
-While::= TK_WHILE TK_LPAREN BoolExp:be TK_RPAREN Body:b
-    {::}
+While::= TK_WHILE:w TK_LPAREN BoolExp:be TK_RPAREN Body:b
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node(w + "", wright, wleft);
+        temp.addNode(be);
+        if(b != null){
+            temp.addListNode(b);
+        }
+        RESULT = temp;
+    :}
     ;
 
-BoolExp::= BoolExp:be OR BoolExp2:be2
-    {::}
+BoolExp::= BoolExp:be OR:or BoolExp2:be2
+    {:
+        Node temp = new Node(or + "", orright, orleft);
+        temp.addNode(be);
+        temp.addNode(be2);
+        RESULT = temp;
+    :}
     |BoolExp2:be2
-    {::}
+    {:
+        RESULT = be2;
+    :}
     ;
 
-BoolExp2::= BoolExp2:be2 AND BoolExp3:be3
-    {::}
+BoolExp2::= BoolExp2:be2 AND:and BoolExp3:be3
+    {:
+        Node temp = new Node(and + "", andright, andleft);
+        temp.addNode(be2);
+        temp.addNode(be3);
+        RESULT = temp;
+    :}
     |BoolExp3:be3
-    {::}
+    {:
+        RESULT = be3;
+    :}
     ;
 
 BoolExp3::= AritExp:ae Operador:o AritExp:ae2
-    {::}
+    {:
+        Node temp = new Node(o.getVal(), oright, oleft);
+        temp.addNode(ae);
+        temp.addNode(ae2);
+        RESULT = temp;
+    :}
     |BOOLEAN:b
-    {::}
+    {:
+        Node temp = new Node(b + "", bright, bleft);
+        RESULT = temp;
+    :}
     |TK_LPAREN BoolExp:be TK_RPAREN
-    {::}
-    |OPREL_NOT TK_LPAREN BoolExp:be TK_RPAREN
-    {::}
+    {:
+        RESULT  = be;
+    :}
+    |OPREL_NOT:n TK_LPAREN BoolExp:be TK_RPAREN
+    {:
+        Node temp = new Node(n + "", nright, nleft);
+        temp.addNode(be);
+        RESULT = temp;
+    :}
     ;
 
 Operador::= TK_OPREL:op
-    {::}
+    {:
+        Node temp = new Node(op + "", opright, opleft);
+        RESULT = temp;
+    :}
     |TK_OPLOG:op
-    {::}
+    {:
+        Node temp = new Node(op + "", opright, opleft);
+        RESULT = temp;
+    :}
     ;
 
 AritExp::= AritExp:ae Sor:sor MultiExp:me
-    {::}
-    |Exp:e
-    {::}
+    {:  
+        Node temp = new Node(sor.getVal(), sorright, sorleft);
+        temp.addNode(ae);
+        temp.addNode(me);
+        RESULT = temp;
+    :}
+    |MultiExp:me
+    {:
+        RESULT = me;
+    :}
     ;
 
 Sor::= MINUS:min
-    {::}
+    {:
+        Node temp = new Node(min + "", minright, minleft);
+        RESULT = temp;
+    :}
     |PLUS:max
-    {::}
+    {:
+        Node temp = new Node(max + "", maxright, maxleft);
+        RESULT = temp;
+    :}
     ;
 
-MultiExp::= MultiExp:me TK_OPMAT Exp:e
-    {::}
+MultiExp::= MultiExp:me TK_OPMAT:op Exp:e
+    {:
+        Node temp = new Node(op + "", opright, opleft);
+        temp.addNode(me);
+        temp.addNode(e);
+        RESULT = temp;
+    :}
     |Exp:e
-    {::}
+    {:
+        RESULT = e;
+    :}
     ;
 
 Exp::= ID:id
-    {::}
+    {:
+        Node temp = new Node(id + "", idright, idleft);
+        RESULT = temp;
+    :}
     |INT:i
-    {::}
+    {:
+        Node temp = new Node(i + "", iright, ileft);
+        RESULT = temp;
+    :}
     |CHAR:c
-    {::}
+    {:
+        Node temp = new Node(c + "", cright, cleft);
+        RESULT = temp;
+    :}
     |STRING:s
-    {::}
+    {:
+        Node temp = new Node(s + "", sright, sleft);
+        RESULT = temp;
+    :}
     |FunCall:fc
-    {::}
+    {:
+        RESULT = fc;
+    :}
     |ArrayE:ae
-    {::}
+    {:
+        RESULT = ae;
+    :}
     |TK_LPAREN AritExp:ae TK_RPAREN
-    {::}
+    {:
+        RESULT = ae;
+    :}
     ;
 
 ArrayE::= TK_LBRACK AritExp:ae TK_RBRACK
-    {::}
+    {:
+        RESULT = ae;
+    :}
     ;
 
 
 /*Bloque Decision IF*/
-If::= TK_IF TK_LPAREN BoolExp:be TK_RPAREN Body:b Else:e
-    {::}
+If::= TK_IF:i TK_LPAREN BoolExp:be TK_RPAREN Body:b Else:e
+    {:
+        Node temp = new Node(i + "", iright, ileft);
+        temp.addNode(be);
+        if(b != null){
+            temp.addListNode(b);
+        }
+        if(e != null){
+            temp.addListNode(e);
+        }
+        RESULT = temp;
+    :}
     ;
 
-Else::= TK_ELSEIF TK_LPAREN BoolExp:be TK_RPAREN Body:b Else:e
-    {::}
-    |TK_ELSE Body:b
-    {::}
+Else::= TK_ELSEIF:ei TK_LPAREN BoolExp:be TK_RPAREN Body:b Else:e
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node(ei + "", eiright, eileft);
+        temp.addNode(be);
+        if(b != null){
+            temp.addListNode(b);
+        }
+        arreglo.add(temp);
+        if(e != null){
+            arreglo.addAll(e);
+        }
+        RESULT = arreglo;
+    :}
+    |TK_ELSE:e Body:b
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node(e + "", eright, eleft);
+        if(b != null){
+            temp.addListNode(b);
+        }
+        arreglo.add(temp);
+        RESULT = arreglo;
+    :}
     |/*Vacio Solo IF*/
-    {::}
+    {:
+        System.out.print("Holis");
+        RESULT = null;
+    :}
     ;
 
-Switch::= TK_SWITCH TK_LPAREN ID:id TK_RPAREN SwitchContent:sc
-    {::}
+Switch::= TK_SWITCH:sw TK_LPAREN ID:id TK_RPAREN SwitchContent:sc
+    {:
+        Node temp = new Node(sw + "", swright, swleft);
+        Node temp2 = new Node(id + "", idright, idleft);
+        temp.addNode(temp2);
+        temp.addListNode(sc);
+        RESULT = temp;
+    :}
     ;
 
-SwitchContent::= TK_CASE ID:id Body:b TK_BREAK TK_SEMICOLON SwitchContent:sc
-    {::}
-    |TK_DEFAULT Body:b TK_BREAK TK_SEMICOLON
-    {::}
+SwitchContent::= TK_CASE:c ID:id Body:b TK_BREAK TK_SEMICOLON SwitchContent:sc
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node(c + "", cright, cleft);
+        Node temp2 = new Node("ID: " + id, idright, idleft);
+        temp.addNode(temp2);
+        if(b != null){
+            temp.addListNode(b);
+        }
+        arreglo.add(temp);
+        arreglo.addAll(sc);
+        RESULT = arreglo;
+    :}
+    |TK_DEFAULT:d Body:b TK_BREAK TK_SEMICOLON
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node(d + "", dright, dleft);
+        if(b != null){
+            temp.addListNode(b);
+        }
+        arreglo.add(temp);
+        RESULT = arreglo;
+    :}
     ;
 
 /*Funcion*/
-Function::= TK_FUNC ID:id TK_LPAREN ParametrosPrime:pp TK_RPAREN Body:b
-    {::}
+Function::= TK_FUNC:f ID:id TK_LPAREN ParametrosPrime:pp TK_RPAREN Body:b
+    {:
+        Node temp = new Node(f + "", fright, fleft);
+        Node temp2 = new Node(id + "", idright, idleft);
+        temp.addNode(temp2);
+        if(pp != null){
+            temp.addNode(pp);
+        }
+        if(b != null){
+            temp.addListNode(b);
+        }
+        RESULT = temp;
+    :}
     ;
 
 ParametrosPrime::= Parametros:ps
-    {::}
+    {:
+        Node temp = new Node("Parametros", psright, psleft);
+        temp.addListNode(ps);
+        RESULT = temp;
+    :}
     | /*Vacio*/
-    {::}
+    {:
+        RESULT = null;
+    :}
     ;
 
 Parametros::= TK_VARIABLE_TIPO:vt ID:id TK_COMMA Parametros:ps
-    {::}
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node("Var", vtright, vtleft);
+        Node temp2 = new Node(vt + "", vtright, vtleft);
+        Node temp3 = new Node("ID: " + id, idright, idleft);
+        temp.addNode(temp2);
+        temp.addNode(temp3);
+        arreglo.add(temp);
+        arreglo.addAll(ps);
+        RESULT = arreglo;
+    :}
     |TK_ARRAY:a ID:id TK_COMMA Parametros:ps
-    {::}
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node("Var", aright, aleft);
+        Node temp2 = new Node(a + "", aright, aleft);
+        Node temp3 = new Node("ID: " + id, idright, idleft);
+        temp.addNode(temp2);
+        temp.addNode(temp3);
+        arreglo.add(temp);
+        arreglo.addAll(ps);
+        RESULT = arreglo;
+    :}
     |TK_ARRAY:a ID:id
-    {::}
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node("Var", aright, aleft);
+        Node temp2 = new Node(a + "", aright, aleft);
+        Node temp3 = new Node("ID: " + id, idright, idleft);
+        temp.addNode(temp2);
+        temp.addNode(temp3);
+        arreglo.add(temp);
+        RESULT = arreglo;
+    :}
     |TK_VARIABLE_TIPO:vt ID:id
-    {::}
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node("Var", vtright, vtleft);
+        Node temp2 = new Node(vt + "", vtright, vtleft);
+        Node temp3 = new Node("ID: " + id, idright, idleft);
+        temp.addNode(temp2);
+        temp.addNode(temp3);
+        arreglo.add(temp);
+        RESULT = arreglo;
+    :}
     ;
 
 FunCall::= TK_SEMICOLON ID:id TK_LPAREN ParametrosFuncionLlamadaPrime:pflp TK_RPAREN
-    {::}
+    {:
+        Node temp = new Node("FunCall", idright, idleft);
+        Node temp2 = new Node(id + "", idright, idleft);
+        temp.addNode(temp2);
+        if(pflp != null){
+            temp.addNode(pflp);
+        }
+        RESULT = temp;
+    :}
     ;
 
 ParametrosFuncionLlamadaPrime::= ParametrosFuncionLlamada:pfl
-    {::}
+    {:
+        Node temp = new Node("Parametros", pflright, pflleft);
+        temp.addListNode(pfl);
+        RESULT = temp;
+    :}
     | /*Vacio*/
-    {::}
+    {:
+        RESULT = null;
+    :}
     ;
 
 ParametrosFuncionLlamada::= ID:id TK_COMMA ParametrosFuncionLlamada:pfl
-    {::}
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node("ID: " + id, idright, idleft);
+        arreglo.add(temp);
+        arreglo.addAll(pfl);
+        RESULT = arreglo;
+    :}
     |ID:id
-    {::}
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node("ID: " + id, idright, idleft);
+        arreglo.add(temp);
+        RESULT = arreglo;
+    :}
     ;
 
 
-Asignar::= TK_SEMICOLON ID:id TK_ASIG Valor:v
-    {::}
+Asignar::= TK_SEMICOLON ID:id TK_ASIG:a Valor:v
+    {:
+        Node temp = new Node(a + "", aright, aleft);
+        Node temp2 = new Node("ID: " + id, idright, idleft);
+        Node temp3 = new Node(v.getVal() + "", vright, vleft);
+        temp.addNode(temp2);
+        temp.addNode(temp3);
+        RESULT = temp;
+    :}
     ;
 
-Imprimir::= TK_SEMICOLON TK_PRINT TK_LBRACK ImpContent:ic TK_RBRACK 
-    {::}
+Imprimir::= TK_SEMICOLON TK_PRINT:p TK_LBRACK ImpContent:ic TK_RBRACK 
+    {:
+        Node temp = new Node(p + "", pright, pleft);
+        temp.addListNode(ic);
+        RESULT = temp;
+    :}
     ;
 
 ImpContent::= STRING:s PLUS ImpContent:ic
-    {::}
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node(s + "", sright, sleft);
+        arreglo.add(temp);
+        arreglo.addAll(ic);
+        RESULT = arreglo;
+    :}
     | STRING:s
-    {::} /*Termina impresion*/
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node(s + "", sright, sleft);
+        arreglo.add(temp);
+        RESULT = arreglo;
+    :} /*Termina impresion*/
     |ValorImpresion:vi PLUS ImpContent:ic
-    {::}
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node(vi.getVal(), viright, vileft);
+        arreglo.add(temp);
+        arreglo.addAll(ic);
+        RESULT = arreglo;
+    :}
     |ValorImpresion:vi
-    {::}
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node(vi.getVal(), viright, vileft);
+        arreglo.add(temp);
+        RESULT = arreglo;
+    :}
     ;
 
-ValorImpresion::= ID:id {::}
-    |FunCall:fc {::}
+ValorImpresion::= ID:id 
+    {:
+        Node temp = new Node(id + "", idright, idleft);
+        RESULT = temp;
+    :}
+    |FunCall:fc 
+    {:
+        RESULT = fc;
+    :}
     ;
 
-Leer::= TK_SEMICOLON TK_INPUT ID:id
-    {::}
+Leer::= TK_SEMICOLON TK_INPUT:i ID:id
+    {:
+        Node temp = new Node("Read", iright, ileft);
+        Node temp2 = new Node("ID: " + id, idright, idleft);
+        temp.addNode(temp2);
+        RESULT = temp;
+    :}
     ;
 
-Main::= For:f Main:m {::}
-    |While:w Main:m {::}
-    |If:i Main:m {::}
-    |Switch:s Main:m {::}
-    |Function:fn Main:m {::}
-    |FunCall:fc Main:m {::}
-    |Imprimir:imp Main:m {::}
-    |Leer:l Main:m {::}
-    |Asignar:a Main:m {::}
-    |{::} /*Vacio para terminar*/
+Main::= For:f Main:m
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        arreglo.add(f);
+        if(m!= null){
+            arreglo.addAll(m);
+        }
+        RESULT = arreglo;
+    :}
+    |While:w Main:m {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        arreglo.add(w);
+        if(m!= null){
+            arreglo.addAll(m);
+        }
+        RESULT = arreglo;
+    :}
+    |If:i Main:m {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        arreglo.add(i);
+        if(m!= null){
+            arreglo.addAll(m);
+        }
+        RESULT = arreglo;
+    :}
+    |Switch:s Main:m {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        arreglo.add(s);
+        if(m!= null){
+            arreglo.addAll(m);
+        }
+        RESULT = arreglo;
+    :}
+    |Function:fn Main:m {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        arreglo.add(fn);
+        if(m!= null){
+            arreglo.addAll(m);
+        }
+        RESULT = arreglo;
+    :}
+    |FunCall:fc Main:m {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        arreglo.add(fc);
+        if(m!= null){
+            arreglo.addAll(m);
+        }
+        RESULT = arreglo;
+    :}
+    |Imprimir:imp Main:m {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        arreglo.add(imp);
+        if(m!= null){
+            arreglo.addAll(m);
+        }
+        RESULT = arreglo;
+    :}
+    |Leer:l Main:m {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        arreglo.add(l);
+        if(m!= null){
+            arreglo.addAll(m);
+        }
+        RESULT = arreglo;
+    :}
+    |Asignar:a Main:m {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        arreglo.add(a);
+        if(m!= null){
+            arreglo.addAll(m);
+        }
+        RESULT = arreglo;
+    :}
+    |{:
+        RESULT = null;
+    :} /*Vacio para terminar*/
     |error Main
     ;
