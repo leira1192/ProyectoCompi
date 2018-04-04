@@ -137,6 +137,8 @@ non terminal Node Leer;
 non terminal ArrayList<Node> VarMulti;
 non terminal ArrayList<Node> VariablePrime;
 non terminal Node Operador;
+non terminal ArrayList<Node> AsignarValor;
+non terminal Node OperacionAsignar;
 
 precedence left PLUS;
 precedence left MINUS;
@@ -177,15 +179,18 @@ Variables::= VarMulti:v
     {:RESULT = v;:}
     ;
 
-VarMulti::= TK_VARIABLE_TIPO:vt ID:id TK_ASIG Valor:v  VariablePrime:vp
+VarMulti::= TK_VARIABLE_TIPO:vt ID:id TK_ASIG Valor:v  AsignarValor:av VariablePrime:vp
     {:
         ArrayList<Node> arreglo = new ArrayList<Node>();
         Node temp = new Node(vt + "", vtright, vtleft);
         Node temp2 = new Node("ID: " + id, idright, idleft);
-        Node temp3 = new Node(v.getVal(), vright, vleft);
+        Node temp3 = new Node(v.getVal() + "", vright, vleft);
         temp.addNode(temp2);
         temp.addNode(temp3);
         arreglo.add(temp);
+        if (av != null){
+            temp.addListNode(av);
+        }
         if(vp != null){
             arreglo.addAll(vp);
         }
@@ -518,7 +523,6 @@ Else::= TK_ELSEIF:ei TK_LPAREN BoolExp:be TK_RPAREN Body:b Else:e
     :}
     |/*Vacio Solo IF*/
     {:
-        System.out.print("Holis");
         RESULT = null;
     :}
     ;
@@ -676,17 +680,57 @@ ParametrosFuncionLlamada::= ID:id TK_COMMA ParametrosFuncionLlamada:pfl
     ;
 
 
-Asignar::= TK_SEMICOLON ID:id TK_ASIG:a Valor:v
+Asignar::= TK_SEMICOLON ID:id TK_ASIG:a Valor:v AsignarValor:av
     {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
         Node temp = new Node(a + "", aright, aleft);
         Node temp2 = new Node("ID: " + id, idright, idleft);
         Node temp3 = new Node(v.getVal() + "", vright, vleft);
         temp.addNode(temp2);
         temp.addNode(temp3);
+        if(av != null){
+            System.out.println("asignar valor no es nulo");
+            temp.addListNode(av);
+        }
         RESULT = temp;
     :}
     ;
 
+AsignarValor::= OperacionAsignar:oa Valor:v AsignarValor:av
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        Node temp = new Node(oa.getVal() + "", oaright, oaleft);
+        Node temp2 = new Node(v.getVal() + "", vright, vleft);
+        temp.addNode(temp2);
+        arreglo.add(temp);
+        if (av != null){
+            arreglo.addAll(av);
+        }
+        RESULT = arreglo;
+    :}
+    | /*Vacio*/
+    {:
+        System.out.println("Retorna vacio");
+        RESULT = null;
+    :}
+    ;
+
+OperacionAsignar::= MINUS:min
+    {:
+        Node temp = new Node(min + "", minright, minleft);
+        RESULT = temp;
+    :}
+    |PLUS:mas
+    {:
+        Node temp = new Node(mas + "", masright, masleft);
+        RESULT = temp;
+    :}
+    |TK_OPMAT:op
+    {:
+        Node temp = new Node(op + "", opright, opleft);
+        RESULT = temp;
+    :}
+    ;
 Imprimir::= TK_SEMICOLON TK_PRINT:p TK_LBRACK ImpContent:ic TK_RBRACK 
     {:
         Node temp = new Node(p + "", pright, pleft);

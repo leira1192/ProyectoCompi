@@ -1,0 +1,4 @@
+start
+	int var0 = 2 + 3
+	;var1 = 0 + 1	
+end

@@ -1,0 +1,6 @@
+start
+	int cont = 1
+	if(cont==3) start
+		cont = cont - 1
+	end
+end  
