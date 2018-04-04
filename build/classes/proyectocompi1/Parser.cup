@@ -6,15 +6,17 @@ import java.lang.reflect.*;
 
 
 parser code {:
+    
     ArrayList<String> errores = new ArrayList();
     Node Padre = new Node("Root",1,1);
+    ArrayList<String> Recursivo = new ArrayList();
     
     @Override
     public void report_error(String message, Object info) {
         StringBuffer sb = new StringBuffer();
         sb.append( message + ":");
         if (info instanceof java_cup.runtime.Symbol) {
-            sb.append("  Column: " + ((Symbol)info).left  +  ", Line: " + ((Symbol)info).right +". Unexpected token: " 
+            sb.append("  Column: " + ((Symbol)info).left  +  ", Line: " + ((Symbol)info).right +". Se encontró un Token Inesperado: " 
                 + getToken(((Symbol)info).sym) +  ". ");
         }
         errores.add(sb+"");
@@ -565,6 +567,7 @@ SwitchContent::= TK_CASE:c ID:id Body:b TK_BREAK TK_SEMICOLON SwitchContent:sc
 /*Funcion*/
 Function::= TK_FUNC:f ID:id TK_LPAREN ParametrosPrime:pp TK_RPAREN Body:b
     {:
+        Node tempo = new Node("Recursivo: ", fright, fleft);
         Node temp = new Node(f + "", fright, fleft);
         Node temp2 = new Node(id + "", idright, idleft);
         temp.addNode(temp2);
@@ -575,6 +578,15 @@ Function::= TK_FUNC:f ID:id TK_LPAREN ParametrosPrime:pp TK_RPAREN Body:b
             temp.addListNode(b);
         }
         RESULT = temp;
+        if(this.parser.Recursivo.size() != 0){
+            for(int i = 0; i < this.parser.Recursivo.size(); i++){
+                if(this.parser.Recursivo.get(i).equals(id + "")){
+                    tempo.addNode(temp);
+                    RESULT = tempo;
+                }
+            }
+        }else{
+        }
     :}
     ;
 
@@ -640,6 +652,7 @@ Parametros::= TK_VARIABLE_TIPO:vt ID:id TK_COMMA Parametros:ps
 
 FunCall::= TK_SEMICOLON ID:id TK_LPAREN ParametrosFuncionLlamadaPrime:pflp TK_RPAREN
     {:
+        this.parser.Recursivo.add(id + "");
         Node temp = new Node("FunCall", idright, idleft);
         Node temp2 = new Node(id + "", idright, idleft);
         temp.addNode(temp2);
@@ -689,7 +702,6 @@ Asignar::= TK_SEMICOLON ID:id TK_ASIG:a Valor:v AsignarValor:av
         temp.addNode(temp2);
         temp.addNode(temp3);
         if(av != null){
-            System.out.println("asignar valor no es nulo");
             temp.addListNode(av);
         }
         RESULT = temp;
@@ -710,7 +722,6 @@ AsignarValor::= OperacionAsignar:oa Valor:v AsignarValor:av
     :}
     | /*Vacio*/
     {:
-        System.out.println("Retorna vacio");
         RESULT = null;
     :}
     ;
