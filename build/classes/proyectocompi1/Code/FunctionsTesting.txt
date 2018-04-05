@@ -3,8 +3,6 @@ start
 		;var = 0
 		;var3(var6,var7)
 	end
-
-	func int var6 (int var7) start
-	return var8
-	end 
+	func var4 (int var5) start
+	end
 end

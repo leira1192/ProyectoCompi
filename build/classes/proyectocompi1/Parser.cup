@@ -121,6 +121,7 @@ non terminal Node MultiExp;
 non terminal Node Exp;
 non terminal Node ArrayE;
 non terminal Node Function;
+non terminal Node FunctionPrime;
 non terminal Node FunCall;
 non terminal Node Sor;
 non terminal Node If;
@@ -565,10 +566,16 @@ SwitchContent::= TK_CASE:c ID:id Body:b TK_BREAK TK_SEMICOLON SwitchContent:sc
     ;
 
 /*Funcion*/
-Function::= TK_FUNC:f ID:id TK_LPAREN ParametrosPrime:pp TK_RPAREN Body:b
+FunctionPrime::= TK_FUNC:f Function:func
     {:
-        Node tempo = new Node("Recursivo: ", fright, fleft);
-        Node temp = new Node(f + "", fright, fleft);
+        RESULT = func;
+    :}
+    ;
+
+Function::= ID:id TK_LPAREN ParametrosPrime:pp TK_RPAREN Body:b
+    {:
+        Node tempo = new Node("Recursivo: ", idright, idleft);
+        Node temp = new Node("func", idright, idleft);
         Node temp2 = new Node(id + "", idright, idleft);
         temp.addNode(temp2);
         if(pp != null){
@@ -577,6 +584,35 @@ Function::= TK_FUNC:f ID:id TK_LPAREN ParametrosPrime:pp TK_RPAREN Body:b
         if(b != null){
             temp.addListNode(b);
         }
+        RESULT = temp;
+        if(this.parser.Recursivo.size() != 0){
+            for(int i = 0; i < this.parser.Recursivo.size(); i++){
+                if(this.parser.Recursivo.get(i).equals(id + "")){
+                    tempo.addNode(temp);
+                    RESULT = tempo;
+                }
+            }
+        }else{
+        }
+    :}
+    |TK_VARIABLE_TIPO:vt ID:id TK_LPAREN ParametrosPrime:pp TK_RPAREN TK_START Main:m TK_RETURN:r ID:id2 TK_END
+    {:
+        Node tempo = new Node("Recursivo: ", idright, idleft);
+        Node temp = new Node("func", idright, idleft);
+        Node temp2 = new Node("ID: " + id, idright, idleft);
+        Node temp3 = new Node("Tipo: " + vt, vtright, vtleft);
+        Node temp4 = new Node(r + "", rright, rleft);
+        Node temp5 = new Node("ID: " + id2, id2right, id2left);
+        temp4.addNode(temp5);
+        temp.addNode(temp3);
+        temp.addNode(temp2);
+        if(pp != null){
+            temp.addNode(pp);
+        }
+        if(m != null){
+            temp.addListNode(m);
+        }
+        temp.addNode(temp4);
         RESULT = temp;
         if(this.parser.Recursivo.size() != 0){
             for(int i = 0; i < this.parser.Recursivo.size(); i++){
@@ -835,9 +871,9 @@ Main::= For:f Main:m
         }
         RESULT = arreglo;
     :}
-    |Function:fn Main:m {:
+    |FunctionPrime:fnp Main:m {:
         ArrayList<Node> arreglo = new ArrayList<Node>();
-        arreglo.add(fn);
+        arreglo.add(fnp);
         if(m!= null){
             arreglo.addAll(m);
         }
@@ -875,7 +911,8 @@ Main::= For:f Main:m
         }
         RESULT = arreglo;
     :}
-    |{:
+    |
+    {:
         RESULT = null;
     :} /*Vacio para terminar*/
     |error Main
