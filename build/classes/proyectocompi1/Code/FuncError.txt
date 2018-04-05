@@ -3,9 +3,9 @@ start
 		;var = 0
 		;var3(var6,var7)
 	end
-	func var4 (int var5) start
+	func var4 (var5) start
 	end
 	func int var8 (int var9) start
-		;var9(var6,var7)
+		;var9(,var7)
 	end
 end

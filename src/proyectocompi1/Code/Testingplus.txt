@@ -1,4 +1,10 @@
 start
 	int var0 = 2 + 3
-	;var1 = 0 + 1	
+	int var1 = 0
+	string var2 = "No le falta nada"
+	char var3 = 'a'
+	bool var4 = true
+	array.int.4 var5 = [1,2,4,5]
+	;var1 = 0 + 1
+
 end

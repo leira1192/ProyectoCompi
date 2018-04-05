@@ -1,0 +1,27 @@
+start
+	int var1 = 0
+	string var2 = "No le falta nada"
+	char var3 = 'a'
+	bool var4 = true
+	array.int.4 var5 = [1,2,4,5]
+	for (int i  0; i <= 10; i++) start
+		;FFinput var
+		while((true)&&(2<)||(2+3!=5)) start
+			;FFprint[var3 + "Hola"]
+		end
+	end
+	if(2==)start
+		switch (var5)
+		case a start
+			;x(var6,var7,var8,var9)
+		end break;
+		default start
+			;var3 = 100 
+		end break;
+	end elseif (4>=a)start
+		;var3 = 56
+	end else start
+		func var7 (var8, string var9, bool var10, char var11)start
+		end
+	end
+end
