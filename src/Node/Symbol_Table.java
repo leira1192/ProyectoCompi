@@ -22,4 +22,12 @@ public class Symbol_Table {
        this.id = id;
        this.type = type;
    }
+   
+   String getId(){
+       return id;
+   }
+   
+   String getType(){
+       return type;
+   }
 }
