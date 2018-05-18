@@ -1,7 +1,15 @@
 start
-	int cont = 1
-	if(cont==3) start
-		cont = cont - 1
-	end
-	= cont + 1
-end  
+func prueba (int var1, bool var3) start
+	;var1 = 0
+	;var3 = true
+	array.int.4 var5 = [1,2,4,5]
+	switch (var5)
+	case a start
+		;x(var6,var7,var8,var9)
+	end break;
+	default start
+		;var3 = 100 
+	end break;
+
+end
+end

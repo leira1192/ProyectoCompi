@@ -105,6 +105,7 @@ terminal TK_COMILLASIMPLE;
 
 non terminal Node Start;
 non terminal ArrayList<Node> Main;
+non terminal ArrayList<Node> MainFunction;
 non terminal ArrayList<Node> Variables;
 non terminal Node Valor;
 non terminal ArrayList<Node> Array;
@@ -112,6 +113,7 @@ non terminal ArrayList<Node> ArrayContent;
 non terminal ArrayList<Node> Content;
 non terminal Node For;
 non terminal ArrayList<Node> Body;
+non terminal ArrayList<Node> BodyFunction;
 non terminal Node While;
 non terminal Node BoolExp;
 non terminal Node BoolExp2;
@@ -322,6 +324,16 @@ For::= TK_FOR:f TK_LPAREN TK_VARIABLE_TIPO:vt ID:id1 TK_ASIG:as INT:i1 TK_SEMICO
     ;
 
 Body::= TK_START Main:m TK_END
+    {:
+        if(m != null){
+            RESULT = m;
+        }else{
+            RESULT = null;
+        }
+    :}
+    ;
+
+BodyFunction::= TK_START MainFunction:m TK_END
     {:
         if(m != null){
             RESULT = m;
@@ -572,7 +584,7 @@ FunctionPrime::= TK_FUNC:f Function:func
     :}
     ;
 
-Function::= ID:id TK_LPAREN ParametrosPrime:pp TK_RPAREN Body:b
+Function::= ID:id TK_LPAREN ParametrosPrime:pp TK_RPAREN BodyFunction:b
     {:
         Node tempo = new Node("Recursivo: ", idright, idleft);
         Node temp = new Node("func", idright, idleft);
@@ -916,4 +928,76 @@ Main::= For:f Main:m
         RESULT = null;
     :} /*Vacio para terminar*/
     |error Main
+    ;
+
+MainFunction::= For:f MainFunction:m
+    {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        arreglo.add(f);
+        if(m!= null){
+            arreglo.addAll(m);
+        }
+        RESULT = arreglo;
+    :}
+    |While:w MainFunction:m {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        arreglo.add(w);
+        if(m!= null){
+            arreglo.addAll(m);
+        }
+        RESULT = arreglo;
+    :}
+    |If:i MainFunction:m {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        arreglo.add(i);
+        if(m!= null){
+            arreglo.addAll(m);
+        }
+        RESULT = arreglo;
+    :}
+    |Switch:s MainFunction:m {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        arreglo.add(s);
+        if(m!= null){
+            arreglo.addAll(m);
+        }
+        RESULT = arreglo;
+    :}
+    |FunCall:fc MainFunction:m {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        arreglo.add(fc);
+        if(m!= null){
+            arreglo.addAll(m);
+        }
+        RESULT = arreglo;
+    :}
+    |Imprimir:imp MainFunction:m {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        arreglo.add(imp);
+        if(m!= null){
+            arreglo.addAll(m);
+        }
+        RESULT = arreglo;
+    :}
+    |Leer:l MainFunction:m {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        arreglo.add(l);
+        if(m!= null){
+            arreglo.addAll(m);
+        }
+        RESULT = arreglo;
+    :}
+    |Asignar:a MainFunction:m {:
+        ArrayList<Node> arreglo = new ArrayList<Node>();
+        arreglo.add(a);
+        if(m!= null){
+            arreglo.addAll(m);
+        }
+        RESULT = arreglo;
+    :}
+    |
+    {:
+        RESULT = null;
+    :} /*Vacio para terminar*/
+    |error MainFunction
     ;
