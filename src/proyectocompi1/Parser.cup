@@ -6,7 +6,7 @@ import java.lang.reflect.*;
 
 
 parser code {:
-    
+
     ArrayList<String> errores = new ArrayList();
     Node Padre = new Node("Root",1,1);
     ArrayList<String> Recursivo = new ArrayList();
